@@ -328,6 +328,7 @@ class _AddHomePageState extends State<AddHomePage> {
   //리스트
   Widget list() {
     return ListView.builder(
+          physics: const NeverScrollableScrollPhysics(),  //스크롤바 없애기
           itemCount: nursingHomeDistanceresult.length,
           shrinkWrap: true,
           itemBuilder: (context, index3){

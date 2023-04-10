@@ -11,9 +11,9 @@ class _UserSecondAllimPageState extends State<UserSecondAllimPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      //backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('개인알림장'),
+        title: const Text('알림장 내용'),
       ),
       body: eachuser(),
     );
@@ -21,29 +21,46 @@ class _UserSecondAllimPageState extends State<UserSecondAllimPage> {
 
   Widget eachuser() {
     return ListView(
-      padding: EdgeInsets.all(15),
       children: [
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              '구미요양원 요양보호사',
-              style: TextStyle(fontSize: 13),
-            ),
-            Text(
-              '2023.03.24',
-              style: TextStyle(fontSize: 10),
-            ),
             Container(
-                margin: EdgeInsets.fromLTRB(0,30,0,30),
+              padding: EdgeInsets.fromLTRB(7, 9, 7, 9),
+              width: double.infinity,
+              color: Colors.white,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '구미요양원 요양보호사',
+                    style: TextStyle(fontSize: 13),
+                  ),
+                  Text(
+                    '2023.03.24',
+                    style: TextStyle(fontSize: 10),
+                  ),
+                ],
+              ),
+            ),
+
+            //알림장 사진
+            Container(
+                margin: EdgeInsets.fromLTRB(0,10,0,10),
                 width: double.infinity,
-                height: 250,
+                color: Colors.white,
+                height: 300,
                 child: Container(
                   child: Image.asset('assets/images/tree.jpg', fit: BoxFit.fill,),
                 )
             ),
+            
+            //알림장 세부 내용
             Container(
-              margin: EdgeInsets.fromLTRB(0,0,0,40),
+              width: double.infinity,
+              color: Colors.white,
+              padding: EdgeInsets.fromLTRB(7,7,7,7),
+              margin: EdgeInsets.only(bottom: 10),
               child: Text(
                 '오늘은 날씨가 좋아서 걷기 운동을 하였습니다.',
                 style: TextStyle(fontSize: 15),
@@ -56,24 +73,38 @@ class _UserSecondAllimPageState extends State<UserSecondAllimPage> {
     );
   }
 
+  //알림장 안에 있는 어르신의 일일정보 함수
   Widget informdata(){
-    return Row(
-      children: [
-        inform('아침','점심','저녁','투약'),
-        VerticalDivider(),
-        inform('전량섭취','전량섭취','전량섭취','진통제'),
-      ],
+    return Container(
+      width: double.infinity,
+      color: Colors.white,
+      padding: EdgeInsets.fromLTRB(7,7,7,7),
+      child: Column(
+        children: [
+          inform('아침','전량섭취'),
+          Divider(thickness: 0.5,),
+          inform('점심','전량섭취'),
+          Divider(thickness: 0.5,),
+          inform('저녁','전량섭취'),
+          Divider(thickness: 0.5,),
+          inform('투약','아침에만'),
+        ],
+      ),
     );
   }
 
-  Widget inform(String text1, String text2,String text3, String text4){
-    return Column(
+  Widget inform(String text1, String text2){
+    return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('$text1'),
-        Text('$text2'),
-        Text('$text3'),
-        Text('$text4'),
+        Container(
+          padding: EdgeInsets.only(right: 30),
+          child: Text(
+            '$text1',
+            style: TextStyle(fontSize: 15,color: Colors.black38),
+          ),
+        ),
+        Text('$text2',style: TextStyle(fontSize: 15,color: Colors.black),),
       ],
     );
   }
