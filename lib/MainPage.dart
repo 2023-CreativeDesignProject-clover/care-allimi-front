@@ -6,6 +6,10 @@ import 'ManagerAllimPage.dart';
 import 'Supplementary/PageRouteWithAnimation.dart';
 import 'AddHomePage.dart';
 
+import 'package:http/http.dart' as http;
+import 'package:test_data/domain/UserInfo.dart';
+import 'dart:convert';
+
 ThemeColor themeColor = ThemeColor();
 
 List<String> textEmoji = ['📢', '✏', '🍀', '📷', '🍚', '🗓', '💌'];
@@ -19,28 +23,35 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  late Future<UserInfo> futureUserInfo;
+
+  @override
+  void initState() {
+    super.initState();
+    futureUserInfo = fetchUserInfo();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xfff8f8f8), //배경색
       appBar: AppBar(
-        title: Text('요양원 알리미', textScaleFactor: 1.0, style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        title: Text('요양원 알리미',
+            textScaleFactor: 1.0,
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         backgroundColor: Colors.white,
         elevation: 0,
       ),
       body: ListView(
         children: [
-
           //TODO: 위젯 작성
-          myCard(),
+          myCard(futureUserInfo),
           //Padding(padding: EdgeInsets.fromLTRB(15,10,15,5), child: Text('바로가기', style: TextStyle(fontWeight: FontWeight.bold))),
           menuList(context),
-
         ],
       ),
     );
   }
-
 
   //소속추가 버튼
   Widget addGroup() {
@@ -48,7 +59,7 @@ class _MainPageState extends State<MainPage> {
       onTap: () {
         pageAnimation(context, AddHomePage());
         print('소속추가 Tap');
-        }, //TODO: 소속추가 클릭 시 이벤트
+      }, //TODO: 소속추가 클릭 시 이벤트
       child: Container(
         padding: EdgeInsets.all(4),
         decoration: BoxDecoration(
@@ -58,8 +69,10 @@ class _MainPageState extends State<MainPage> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.add_rounded, size: 16,color: themeColor.getColor()),
-            Text('소속추가 ', textScaleFactor: 0.9, style: TextStyle(color: themeColor.getColor()))
+            Icon(Icons.add_rounded, size: 16, color: themeColor.getColor()),
+            Text('소속추가 ',
+                textScaleFactor: 0.9,
+                style: TextStyle(color: themeColor.getColor()))
           ],
         ),
       ),
@@ -67,42 +80,63 @@ class _MainPageState extends State<MainPage> {
   }
 
   //현재 선택된 요양원 + 내 역할
-  Widget myInfo() {
+  Widget myInfo(futureUserInfo) {
     return Container(
       width: double.infinity,
       height: 120,
-      padding: EdgeInsets.all(10),
-      margin: EdgeInsets.all(15),
+      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.all(15),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
-          color: Colors.white),
+          borderRadius: BorderRadius.circular(5), color: Colors.white),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Text('🏡', style: GoogleFonts.notoColorEmoji(fontSize: 50)),
           SizedBox(width: 10),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('금오요양원', textScaleFactor: 1.4, style: TextStyle(fontWeight: FontWeight.bold)), //TODO: 요양원 이름
-              Text('삼족오 보호자님'), //TODO: 내 역할
-            ],
-          ),
+          Center(
+            child: FutureBuilder<UserInfo>(
+                future: fetchUserInfo(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    String userInfoTxt = '' + snapshot.data!.protectorName;
+                    String userRole = snapshot.data!.userRole;
+                    if (userRole == 'PROTECTOR') {
+                      userInfoTxt += '보호자님';
+                    } else if (userRole == 'MANAGER') {
+                      userInfoTxt += '관리자님';
+                    } else {
+                      userInfoTxt += '요양보호사님';
+                    }
+
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(snapshot.data!.facilityName,
+                            textScaleFactor: 1.4,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold)), //TODO: 요양원 이름
+                        Text(userInfoTxt), //TODO: 내 역할
+                      ],
+                    );
+                  }
+                  return Text("asdf");
+                }),
+          )
         ],
       ),
     );
   }
 
   //현재 선택된 요양원 출력
-  Widget myCard() {
+  Widget myCard(futureUserInfo) {
     return Stack(
       children: [
-        myInfo(),
+        myInfo(futureUserInfo),
         Positioned(
-            top: 23,
-            right: 23,
-            child: addGroup(),
+          top: 23,
+          right: 23,
+          child: addGroup(),
         ),
       ],
     );
@@ -111,41 +145,46 @@ class _MainPageState extends State<MainPage> {
   //메뉴 리스트 출력
   Widget menuList(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(11,0,11,0),
+      padding: EdgeInsets.fromLTRB(11, 0, 11, 0),
       child: GridView.builder(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
           itemCount: textMenu.length, //총 몇 개 출력할 건지
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3, //한 행에 몇 개 출력할 건지
-            childAspectRatio: 2/2.2, //가로세로 비율
+            childAspectRatio: 2 / 2.2, //가로세로 비율
             mainAxisSpacing: 1,
             crossAxisSpacing: 1,
           ),
           itemBuilder: (context, index) {
             return GestureDetector(
-              onTap: () { onButtonTap(index); },
+              onTap: () {
+                onButtonTap(index);
+              },
               child: Card(
                 elevation: 0,
                 color: Colors.white,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(textEmoji[index], style: GoogleFonts.notoColorEmoji(fontSize: 30)),
+                    Text(textEmoji[index],
+                        style: GoogleFonts.notoColorEmoji(fontSize: 30)),
                     SizedBox(height: 5),
-                    Text(textMenu[index], textScaleFactor: 1.05,),
+                    Text(
+                      textMenu[index],
+                      textScaleFactor: 1.05,
+                    ),
                   ],
                 ),
               ),
             );
-          }
-      ),
+          }),
     );
   }
 
   // TODO: 메뉴 Tap 시 실행
   void onButtonTap(int index) {
-    switch(index) {
+    switch (index) {
       case 0:
         print('공지사항 Tap');
         break;
@@ -172,6 +211,15 @@ class _MainPageState extends State<MainPage> {
         break;
     }
   }
+}
 
+Future<UserInfo> fetchUserInfo() async {
+  final response = await http.get(Uri.parse('http://43.200.181.6/v1/users/1'));
+  final jsonResponse = jsonDecode(Utf8Decoder().convert(response.bodyBytes));
 
+  if (response.statusCode == 200) {
+    return UserInfo.fromJson(jsonResponse);
+  } else {
+    throw Exception('Failed to load UserInfo');
+  }
 }

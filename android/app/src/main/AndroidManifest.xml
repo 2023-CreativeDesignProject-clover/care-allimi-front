@@ -1,5 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="kr.ac.kumoh.test_data">
+
+    <!-- Required to fetch data from the internet. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+
    <application
         android:label="test_data"
         android:name="${applicationName}"
@@ -32,3 +37,5 @@
             android:value="2" />
     </application>
 </manifest>
+
+
