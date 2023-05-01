@@ -49,7 +49,7 @@ class _UserCommentPageState extends State<UserCommentPage> {
                   children: [
                     Row(
                       children: [
-                        Text(date[index]),
+                        Text(date[index], textScaleFactor: 1.0,),
                         Spacer(),
                         Container(
                           padding: EdgeInsets.all(4),
@@ -62,10 +62,7 @@ class _UserCommentPageState extends State<UserCommentPage> {
                         ),
                       ],
                     ),
-                    Text(
-                      com[index],
-                      style: TextStyle(fontSize: 15,),
-                    ),
+                    Text(com[index], textScaleFactor: 1.1,),
                   ],
                 ),
               );

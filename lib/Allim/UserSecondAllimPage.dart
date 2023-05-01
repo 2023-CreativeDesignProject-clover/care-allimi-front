@@ -12,9 +12,7 @@ class _UserSecondAllimPageState extends State<UserSecondAllimPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       //backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text('알림장 내용'),
-      ),
+      appBar: AppBar(title: Text('알림장 내용')),
       body: eachuser(),
     );
   }
@@ -46,7 +44,7 @@ class _UserSecondAllimPageState extends State<UserSecondAllimPage> {
 
             //알림장 사진
             Container(
-                margin: EdgeInsets.fromLTRB(0,10,0,10),
+                margin: EdgeInsets.fromLTRB(0,10,0,0),
                 width: double.infinity,
                 color: Colors.white,
                 height: 300,
@@ -54,7 +52,7 @@ class _UserSecondAllimPageState extends State<UserSecondAllimPage> {
                   child: Image.asset('assets/images/tree.jpg', fit: BoxFit.fill,),
                 )
             ),
-            
+
             //알림장 세부 내용
             Container(
               width: double.infinity,

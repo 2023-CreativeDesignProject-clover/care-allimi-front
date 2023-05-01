@@ -17,7 +17,7 @@ class _CommentPageState extends State<ManagerCommentPage> {
       body: commentList(),
     );
   }
-
+  List<String> whosend =['삼족오 보호자님','사족오 보호자님','오족오 보호자님'];
   List<String> date =['2022.12.23','2022.12.24','2022.12.25'];
   List<String> com =['택배로 간식을 보냈으니 어머니께 드려주세요.','보호사님 오늘도 잘 부탁드립니다.','필요 물품을 택배로 보냈습니다.'];
 
@@ -39,11 +39,10 @@ class _CommentPageState extends State<ManagerCommentPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(date[index]),
-                    Text(
-                      com[index],
-                      style: TextStyle(fontSize: 15,),
-                    ),
+                    Text(whosend[index], textScaleFactor: 1.0,),
+                    Text(date[index], textScaleFactor: 1.0,),
+                    SizedBox(height: 10,),
+                    Text(com[index], textScaleFactor: 1.1,),
                   ],
                 ),
               );

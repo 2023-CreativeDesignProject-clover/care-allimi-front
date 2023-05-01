@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 import '/Supplementary/ThemeColor.dart';
-import 'package:intl/date_symbol_data_local.dart';
 
 ThemeColor themeColor = ThemeColor();
 

@@ -19,7 +19,6 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
 
     );
   }
-
   //시설장 및 직원 알림장(각 목록)
   Widget eachmanager() {
     return ListView(
@@ -37,7 +36,7 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '구미요양원 요양보호사',
+                            '삼족오 보호자님',
                             style: TextStyle(fontSize: 13),
                           ),
                           Text(
@@ -62,7 +61,7 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
                         //alignment: Alignment.centerRight,
                         child: OutlinedButton(
                             onPressed: (){
-                              //삭제 화면으로 넘어가기
+                              //삭제
                             },
                             child: Text('삭제')
                         ),
@@ -73,7 +72,7 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
 
                 //알림장 사진
                 Container(
-                    margin: EdgeInsets.fromLTRB(0,10,0,10),
+                    margin: EdgeInsets.fromLTRB(0,10,0,0),
                     width: double.infinity,
                     color: Colors.white,
                     height: 300,

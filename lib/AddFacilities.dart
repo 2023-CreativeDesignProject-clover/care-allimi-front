@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:multi_masked_formatter/multi_masked_formatter.dart';
 
 class AddFacilities extends StatefulWidget {
   const AddFacilities({Key? key}) : super(key: key);
@@ -53,6 +54,9 @@ class _AddFacilitiesState extends State<AddFacilities> {
 
                   getTextFormField(
                       textInputType: TextInputType.number,
+                      inputFormatters: [
+                        MultiMaskedTextInputFormatter(masks: ['xxx-xxxx-xxxx', 'xxx-xxx-xxxx'], separator: '-')
+                      ],
                       icon: Icons.call_rounded,
                       hintText: '전화번호',
                       controller: numberController,
@@ -89,7 +93,7 @@ class _AddFacilitiesState extends State<AddFacilities> {
 
 
   Widget getTextFormField({
-    required TextInputType textInputType,
+    TextInputType? textInputType,
     required IconData? icon,
     required String? hintText,
     required TextEditingController controller,
