@@ -2,15 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:test_data/Invite/InviteWaitPage.dart';
 import 'package:test_data/LoginPage.dart';
-import 'package:test_data/ResidentInfoInputPage.dart';
-import 'package:test_data/SignupPage.dart';
 import 'package:test_data/provider/ResidentProvider.dart';
 import 'package:test_data/provider/UserProvider.dart';
 import 'Supplementary/ThemeColor.dart';
 import 'MainPage.dart';
 import 'Setup/SetupPage.dart';
 import 'package:intl/date_symbol_data_local.dart';
-
 
 ThemeColor themeColor = ThemeColor();
 
@@ -34,7 +31,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   var _curIndex = 0;
 
   @override
@@ -93,7 +89,6 @@ class _MyAppState extends State<MyApp> {
               ),
             );
           }
-
         }
       ),
     );

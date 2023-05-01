@@ -21,6 +21,11 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void setRole(String urole) {
+    this.urole = urole;
+    notifyListeners();
+  }
+
   void changeRoleData() {
     this.urole = 'asdf';
     notifyListeners();

@@ -9,8 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-String backendUrl = "http://3.36.73.115:8080/v2/";
-
+String backendUrl = "http://13.125.155.244:8080/v2/";
 
 class pickImages extends StatefulWidget {
   const pickImages({Key? key}) : super(key: key);

@@ -5,7 +5,7 @@ import 'LoginPage.dart';
 import 'Supplementary/PageRouteWithAnimation.dart';
 import 'package:http/http.dart' as http; //http 사용
 
-String backendUrl = "http://3.36.73.115:8080/v2/";
+String backendUrl = "http://13.125.155.244:8080/v2/";
 
 Future<String> signUpRequest(String id, String password, String name, String phoneNum) async {
   http.Response response = await http.post(
@@ -84,7 +84,7 @@ class _SignupPageState extends State<SignupPage> {
                     value!.isEmpty ? '비밀번호를 입력해주세요.' : null,
                     onSaved: (value) => _password = value!,
                   ),
-     TextFormField(
+                  TextFormField(
                     obscureText: true,
                     decoration: InputDecoration(labelText: '이름'),
                     validator: (value) =>

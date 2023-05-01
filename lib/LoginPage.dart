@@ -10,7 +10,7 @@ import 'SignupPage.dart';
 import 'Supplementary/PageRouteWithAnimation.dart';
 import 'package:http/http.dart' as http; //http 사용
 
-String backendUrl = "http://3.36.73.115:8080/v2/";
+String backendUrl = "http://13.125.155.244:8080/v2/";
 
 Future<String> getUserInfo(int userId) async {
   http.Response response = await http.get(
