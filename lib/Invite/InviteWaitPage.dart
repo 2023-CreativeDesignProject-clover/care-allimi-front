@@ -10,28 +10,6 @@ import 'package:http/http.dart' as http; //http 사용
 
 String backendUrl = "http://13.125.155.244:8080/v2/";
 
-//사용자의 초대대기 화면
-
-Future<String> tempDummy(int uid) async {
-  http.Response response = await http.post(
-    Uri.parse(backendUrl+ 'nhResident'),
-    headers: <String, String>{
-      'Content-Type': 'application/json',
-      'Accept-Charset': 'utf-8'
-    },
-    body: jsonEncode({
-      "user_id": uid,
-      "facility_id": 1,
-      "resident_name": "string",
-      "birth": "string",
-      "user_role": "MANAGER",
-      "health_info": "string"
-    })
-  );
-
-  return utf8.decode(response.bodyBytes);
-}
-
 class InviteWaitPage extends StatefulWidget {
   @override
   _InviteWaitPageState createState() => _InviteWaitPageState();

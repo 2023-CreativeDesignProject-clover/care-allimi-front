@@ -9,6 +9,8 @@ import 'dart:convert';
 import '/AllimModel.dart';
 import 'package:http/http.dart' as http; //http 사용
 
+String backendUrl = "http://13.125.155.244:8080/v2/";
+
 class ManagerAllimPage extends StatefulWidget {
 
   @override
@@ -99,72 +101,72 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
                   physics: NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index){
                     return Container(
-                        color: Colors.white,
-                        child: ListTile(
-                          title: Column(
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    color: Colors.white),
-                                width: double.infinity,
-                                height: 130,
-                                padding: EdgeInsets.only(top: 5,left: 1,right: 1),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          //어떤 보호자에게 썼는지
-                                          Container(
+                      color: Colors.white,
+                      child: ListTile(
+                        title: Column(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: Colors.white),
+                              width: double.infinity,
+                              height: 130,
+                              padding: EdgeInsets.only(top: 5,left: 1,right: 1),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        //어떤 보호자에게 썼는지
+                                        Container(
+                                          child: Text(
+                                            "어떤보호자?",
+                                            style: TextStyle(fontSize: 12,),
+                                          ),
+                                        ),
+                                        //언제 썼는지
+                                        Container(
+                                          child: Text(
+                                            _noticeList[index]['create_date'],
+                                            style: TextStyle(fontSize: 10,),
+                                          ),
+                                        ),
+                                        Spacer(),
+                                        //세부내용(너무 길면 ...로 표시)
+                                        Container(
+                                            padding: EdgeInsets.fromLTRB(0, 5, 15, 0),
                                             child: Text(
-                                              "어떤보호자?",
-                                              style: TextStyle(fontSize: 12,),
-                                            ),
-                                          ),
-                                          //언제 썼는지
-                                          Container(
-                                            child: Text(
-                                              _noticeList[index]['create_date'],
-                                              style: TextStyle(fontSize: 10,),
-                                            ),
-                                          ),
-                                          Spacer(),
-                                          //세부내용(너무 길면 ...로 표시)
-                                          Container(
-                                              padding: EdgeInsets.fromLTRB(0, 5, 15, 0),
-                                              child: Text(
-                                                _noticeList[index]['content'],
-                                                style: TextStyle(fontSize: 14),
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
-                                                textAlign: TextAlign.left,
-                                              )
-                                          ),
-                                          Spacer(),
-                                        ],
-                                      ),
+                                              _noticeList[index]['content'],
+                                              style: TextStyle(fontSize: 14),
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.left,
+                                            )
+                                        ),
+                                        Spacer(),
+                                      ],
                                     ),
-                                    //이미지
-                                    if (_noticeList[index]['imageUrl'] != null)
-                                      Container(
-                                          width: 100,
-                                          height: 100,
-                                          child: Container(
-                                            child: Image.network(_noticeList[index]['imageUrl'][0], fit: BoxFit.fill,),
-                                          )
-                                      ),
-                                  ],
-                                ),
+                                  ),
+                                  //이미지
+                                  if (_noticeList[index]['imageUrl'] != null)
+                                    Container(
+                                        width: 100,
+                                        height: 100,
+                                        child: Container(
+                                          child: Image.network(_noticeList[index]['imageUrl'][0], fit: BoxFit.fill,),
+                                        )
+                                    ),
+                                ],
                               ),
-                            ],
-                          ),
-                          onTap: (){
-                            pageAnimation(context, ManagerSecondAllimPage());
-                            print(index);
-                          },
+                            ),
+                          ],
                         ),
+                        onTap: (){
+                          pageAnimation(context, ManagerSecondAllimPage(noticeId: _noticeList[index]['noticeId']));
+                          print(index);
+                        },
+                      ),
 
                     );
                   }, separatorBuilder: (BuildContext context, int index) => const Divider(height: 9, color: Color(0xfff8f8f8),),  //구분선(height로 상자 사이 간격을 조절)
