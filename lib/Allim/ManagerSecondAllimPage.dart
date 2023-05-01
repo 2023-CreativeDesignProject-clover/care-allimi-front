@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http; //http 사용
 
@@ -12,6 +13,7 @@ class ManagerSecondAllimPage extends StatefulWidget {
   }) : super(key: key);
 
   final int noticeId;
+  
 
   @override
   State<ManagerSecondAllimPage> createState() => _ManagerSecondAllimPageState();
@@ -24,11 +26,26 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
 
   void initState() {
     _noticeId = widget.noticeId;
+
+  }
+
+  Future<void> deleteNotice(int noticeId) async {
+    http.Response response = await http.delete(
+      Uri.parse(backendUrl+ 'notices'),
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Accept-Charset': 'utf-8'
+      },
+      body: jsonEncode({
+        "notice_id": noticeId
+      })
+    );
+
+    if (response != 200)
+      throw Exception();
   }
 
   Future<void> getNoticeDetail() async {
-
-    //입소자추가 psot
     http.Response response = await http.get(
       Uri.parse(backendUrl+ 'notices/detail/' + _noticeId.toString()),
       headers: <String, String>{
@@ -47,12 +64,10 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
     dynamic decodedJson = json.decode(data);
 
     Map<String, dynamic> parsedJson = Map<String, dynamic>.from(decodedJson);
+    _noticeDetail = parsedJson;
 
+    _imageUrls = List<String>.from(parsedJson['image_url']);
 
-    setState(() {
-      _noticeDetail = parsedJson;
-      _imageUrls = List<String>.from(parsedJson['image_url']);
-    });
   }
 
   @override
@@ -112,8 +127,36 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
                       padding: EdgeInsets.all(5),
                       //alignment: Alignment.centerRight,
                       child: OutlinedButton(
-                          onPressed: (){
-                            //삭제
+                          onPressed: () async {
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  content: Text("정말 삭제하시겠습니까>"),
+                                  insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                                  actions: [
+                                    TextButton(
+                                      child: const Text('삭제'),
+                                      onPressed: () async {
+                                        try {
+                                          await deleteNotice(_noticeId);
+                                        } catch(e) {
+                                        }
+
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                    TextButton(
+                                      child: const Text('취소'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              }
+                            );
                           },
                           child: Text('삭제')
                       ),
@@ -137,12 +180,12 @@ class _ManagerSecondAllimPageState extends State<ManagerSecondAllimPage> {
               //     )
               // ),
               Column(
-                    children: [
-                      for (int i =0; i< _imageUrls.length; i++ ) ...[
-                        Image.network(_imageUrls[i], fit: BoxFit.fill,),
-                      ]
-                    ]
-                  ),
+                children: [
+                  for (int i =0; i< _imageUrls.length; i++ ) ...[
+                    Image.network(_imageUrls[i], fit: BoxFit.fill,),
+                  ]
+                ]
+              ),
               
         
               //알림장 세부 내용

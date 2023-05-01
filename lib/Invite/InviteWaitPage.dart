@@ -57,7 +57,6 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
           onPressed: () async {
           }
         )
-          
       ),
       body: Scrollbar(
         child: ListView(
@@ -109,6 +108,48 @@ class _InviteWaitPageState extends State<InviteWaitPage> {
                   }
                 )
             ),
+            ElevatedButton (
+              child: Text(
+                '로그아웃',
+                style: TextStyle(fontSize: 18.0),
+              ),
+              style: ElevatedButton.styleFrom(
+                padding: EdgeInsets.all(7),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)
+                ),
+              ),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) =>
+                      AlertDialog(
+                        content: const Text('로그아웃하시겠습니까?'),
+                        actions: [
+                          TextButton(child: Text('아니오',
+                            style: TextStyle(color: themeColor.getMaterialColor())),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              }),
+                          Consumer<UserProvider>(
+                            builder: (context, userProvider, child) {
+                              return TextButton(child: Text('예',
+                                style: TextStyle(color: themeColor.getMaterialColor())),
+                                  onPressed: () {
+                                    userProvider.logout();
+                                    userProvider.getData();
+                                Navigator.pop(context);
+                                //TODO: 로그아웃 실행
+                                
+                              });
+                            }
+                          ),
+                        ],
+                      ),
+                );
+              }
+            ),
+            
           ],
         )
       ),

@@ -1,3 +1,4 @@
+import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:test_data/provider/ResidentProvider.dart';
@@ -48,6 +49,13 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
       Allim(noticeDate[index], noticeDetail[index], noticeimgPath[index]));
 
   List<Map<String, dynamic>> _noticeList = [];
+  late AsyncMemoizer _memoizer;
+
+  @override
+  void initState() {
+    super.initState();
+    _memoizer = AsyncMemoizer();
+  }
 
   Future<void> getNotice(int residentId) async {
     http.Response response = await http.get(
@@ -65,10 +73,16 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
     setState(() {
       _noticeList =  parsedJson;
     });
+
+    return this._memoizer.runOnce(() async { // This below code will call only ones. This will return the same data directly without performing any Future task.
+      await Future.delayed(Duration(seconds: 10));
+      return 'DATA';
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       //backgroundColor: Color(0xfff8f8f8),
       appBar: AppBar(
@@ -88,6 +102,7 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
 
 //시설장 및 직원 알림장 목록
   Widget managerlist() {
+
     return Consumer<ResidentProvider>(
       builder: (context, residentProvider, child) {
         return FutureBuilder(
@@ -99,77 +114,97 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
                   itemCount: _noticeList.length,
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index){
-                    return Container(
-                      color: Colors.white,
-                      child: ListTile(
-                        title: Column(
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: Colors.white),
-                              width: double.infinity,
-                              height: 130,
-                              padding: EdgeInsets.only(top: 5,left: 1,right: 1),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        //어떤 보호자에게 썼는지
-                                        Container(
-                                          child: Text(
-                                            "어떤보호자?",
-                                            style: TextStyle(fontSize: 12,),
-                                          ),
-                                        ),
-                                        //언제 썼는지
-                                        Container(
-                                          child: Text(
-                                            _noticeList[index]['create_date'],
-                                            style: TextStyle(fontSize: 10,),
-                                          ),
-                                        ),
-                                        Spacer(),
-                                        //세부내용(너무 길면 ...로 표시)
-                                        Container(
-                                            padding: EdgeInsets.fromLTRB(0, 5, 15, 0),
-                                            child: Text(
-                                              _noticeList[index]['content'],
-                                              style: TextStyle(fontSize: 14),
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
-                                              textAlign: TextAlign.left,
-                                            )
-                                        ),
-                                        Spacer(),
-                                      ],
-                                    ),
-                                  ),
-                                  //이미지
-                                  if (_noticeList[index]['imageUrl'] != null)
-                                    Container(
-                                        width: 100,
-                                        height: 100,
-                                        child: Container(
-                                          child: Image.network(_noticeList[index]['imageUrl'][0], fit: BoxFit.fill,),
-                                        )
-                                    ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        onTap: (){
-                          pageAnimation(context, ManagerSecondAllimPage(noticeId: _noticeList[index]['noticeId']));
-                          print(index);
-                        },
-                      ),
+                  itemBuilder: (context, index) {          
+                    if (_noticeList != null && _noticeList.length != 0) {
 
-                    );
-                  }, separatorBuilder: (BuildContext context, int index) => const Divider(height: 9, color: Color(0xfff8f8f8),),  //구분선(height로 상자 사이 간격을 조절)
+                      List<String> imgList = List<String>.from(_noticeList[index]['imageUrl']);
+
+                      return Container(
+                        color: Colors.white,
+                        child: ListTile(
+                          title: Column(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: Colors.white),
+                                width: double.infinity,
+                                height: 130,
+                                padding: EdgeInsets.only(top: 5,left: 1,right: 1),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          //어떤 보호자에게 썼는지
+                                          Container(
+                                            child: Text(
+                                              "어떤보호자?",
+                                              style: TextStyle(fontSize: 12,),
+                                            ),
+                                          ),
+                                          //언제 썼는지
+                                          Container(
+                                            child: Text(
+                                              _noticeList[index]['create_date'].toString().substring(0, 10),
+                                              style: TextStyle(fontSize: 10,),
+                                            ),
+                                          ),
+                                          Spacer(),
+                                          //세부내용(너무 길면 ...로 표시)
+                                          Container(
+                                              padding: EdgeInsets.fromLTRB(0, 5, 15, 0),
+                                              child: Text(
+                                                _noticeList[index]['content'],
+                                                style: TextStyle(fontSize: 14),
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                textAlign: TextAlign.left,
+                                              )
+                                          ),
+                                          Spacer(),
+                                        ],
+                                      ),
+                                    ),
+                                    //이미지 
+                                    if (imgList.length != 0)
+                                      Container(
+                                          width: 100,
+                                          height: 100,
+                                          child:  Builder(
+                                            builder: (context) {
+                                              if (imgList.length != 0) {
+                                                return Container(
+                                                  child: Image.network(imgList[0], fit: BoxFit.fill,),
+                                                );
+                                              } else {
+                                                return Container();
+                                              }
+                                              
+                                            }
+                                          )
+                                      )
+                                      
+                                      
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          onTap: (){
+                            debugPrint("333333" + _noticeList[index]['noticeId'].toString());
+                            pageAnimation(context, ManagerSecondAllimPage(noticeId: _noticeList[index]['noticeId']));
+                            print(index);
+                          },
+                        ),
+
+                      );
+                    
+                      } else {
+                        return Container();
+                      }
+                    }, separatorBuilder: (BuildContext context, int index) => const Divider(height: 9, color: Color(0xfff8f8f8),),  //구분선(height로 상자 사이 간격을 조절)
                 ),
 
               ],
