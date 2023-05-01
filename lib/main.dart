@@ -9,10 +9,13 @@ import 'package:test_data/provider/UserProvider.dart';
 import 'Supplementary/ThemeColor.dart';
 import 'MainPage.dart';
 import 'Setup/SetupPage.dart';
+import 'package:intl/date_symbol_data_local.dart';
+
 
 ThemeColor themeColor = ThemeColor();
 
-void main() {
+void main() async {
+  await initializeDateFormatting();
     runApp(
     //Provider 등록
       MultiProvider(providers: [

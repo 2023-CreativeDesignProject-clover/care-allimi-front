@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class FirstDropdown extends StatefulWidget {
-  const FirstDropdown({Key? key}) : super(key: key);
+class AllimFirstDropdown extends StatefulWidget {
+  const AllimFirstDropdown({Key? key}) : super(key: key);
 
   @override
-  State<FirstDropdown> createState() => _FirstDropdownState();
+  State<AllimFirstDropdown> createState() => _AllimFirstDropdownState();
 }
 
-class _FirstDropdownState extends State<FirstDropdown> {
+class _AllimFirstDropdownState extends State<AllimFirstDropdown> {
   final items = ['금식', '전량섭취', '반량섭취'];
   String? selectedValue;
 
@@ -38,14 +38,14 @@ class _FirstDropdownState extends State<FirstDropdown> {
 /* ---------------------------------------------------------------------------------- */
 
 
-class SecondDropdown extends StatefulWidget {
-  const SecondDropdown({Key? key}) : super(key: key);
+class AllimSecondDropdown extends StatefulWidget {
+  const AllimSecondDropdown({Key? key}) : super(key: key);
 
   @override
-  State<SecondDropdown> createState() => _SecondDropdownState();
+  State<AllimSecondDropdown> createState() => _AllimSecondDropdownState();
 }
 
-class _SecondDropdownState extends State<SecondDropdown> {
+class _AllimSecondDropdownState extends State<AllimSecondDropdown> {
   final items = ['해당 사항 없음','아침', '점심', '저녁', '아침&점심', '아침&저녁', '점심&저녁', '아침&점심&저녁'];
   String? selectedValue;
 
@@ -75,3 +75,40 @@ class _SecondDropdownState extends State<SecondDropdown> {
 
 /* ---------------------------------------------------------------------------------- */
 
+class NoticeDropdown extends StatefulWidget {
+  const NoticeDropdown({Key? key}) : super(key: key);
+
+  @override
+  State<NoticeDropdown> createState() => _NoticeDropdownState();
+}
+
+class _NoticeDropdownState extends State<NoticeDropdown> {
+  final items = ['공지사항', '중요'];
+  String? selectedValue;
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      selectedValue = items[0];
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+      color: Colors.white,
+      child:
+      DropdownButton<String>(
+        isExpanded: true,
+        value: selectedValue,
+        underline: SizedBox.shrink(),
+        items: items.map((e) => DropdownMenuItem(
+            value: e,
+            child: Text(e))).toList(),
+        onChanged: (value) {setState(() => selectedValue = value!);},
+      ),
+    );
+  }
+}

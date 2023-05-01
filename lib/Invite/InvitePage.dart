@@ -13,8 +13,16 @@ class InvitePage extends StatefulWidget {
 enum Answer {protect, employee}
 
 class _InvitePageState extends State<InvitePage> {
+  String result = '';
+  bool isprotect = true;
+  bool isemployee = false;
+  late List<bool> isSelected;
 
-  Map<int, Answer?> answerVal = {};
+  @override
+  void initState() {
+    isSelected = [isprotect, isemployee];
+    super.initState();
+  }
 
   final formKey = GlobalKey<FormState>();
   @override
@@ -59,52 +67,36 @@ class _InvitePageState extends State<InvitePage> {
               ),
 
               Container(
-                color: Colors.white,
+                //color: Colors.white,
                 child: ListTile(
                   contentPadding: const EdgeInsets.all(16.0),
-                  title: const Text('초대하실 유형을 선택해주세요', textScaleFactor: 1.2,),
-                  subtitle: Padding(
-                    padding: const EdgeInsets.only(top: 12.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: RadioListTile<Answer>(
-                            title: const Text('보호자'),
-                            value: Answer.protect,
-                            groupValue: answerVal[index],
-                            onChanged: (Answer? value){
-                              setState(() {
-                                answerVal[index] = value;
-                              });
-                            },
-                          ),
-                        ),
-                        Expanded(
-                          child: RadioListTile<Answer>(
-                            title: const Text('직원'),
-                            value: Answer.employee,
-                            groupValue: answerVal[index],
-                            onChanged: (Answer? value){
-                              setState(() {
-                                answerVal[index] = value;
-                              });
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
+                  title: const Text('초대하실 유형을 선택해주세요', textScaleFactor: 1.1,),
+                  subtitle: Column(
+                    children: [
+                      SizedBox(height: 25,),
+                      ToggleButtons(
+                        children: [
+                          Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 50,vertical: 50),
+                              child: Text('보호자', style: TextStyle(fontSize: 18))),
+                          Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 50,vertical: 50),
+                              child: Text('직원', style: TextStyle(fontSize: 18))),
+                        ],
+                        isSelected: isSelected,
+                        onPressed: toggleSelect,
+                      ),
+                    ],
                   ),
                 ),
               ),
-
               Container(
-                  color: Colors.white,
+                  //color: Colors.white,
                   padding: EdgeInsets.only(left: 18,top: 12, right: 18),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      //Text('초대하실 유형을 선택하세요', textScaleFactor: 1.4,),
                       SizedBox(height: 10,),
                       Text('휴대폰 번호', textScaleFactor: 1.1,),
                       SizedBox(height: 5,),
@@ -118,7 +110,7 @@ class _InvitePageState extends State<InvitePage> {
                               LengthLimitingTextInputFormatter(13) //13자리만 입력(하이픈 2+숫자 11)
                             ],
                             validator: (value) {
-                              if(value!.isEmpty) { return '내용을 입력하세요'; }
+                              if(value!.isEmpty||value.length!=13) { return '번호를 입력해주세요'; }
                               else { return null; }
                             },
                             keyboardType: TextInputType.number, //키보드는 숫자
@@ -155,6 +147,18 @@ class _InvitePageState extends State<InvitePage> {
       },
     );
   }
+  void toggleSelect(value) {
+    if (value == 0) {
+      isprotect = true;
+      isemployee = false;
+    } else {
+      isprotect = false;
+      isemployee = true;
+    }
+    setState(() {
+      isSelected = [isprotect, isemployee];
+    });
+  }
 }
 //자동 하이픈
 class NumberFormatter extends TextInputFormatter {
@@ -172,7 +176,7 @@ class NumberFormatter extends TextInputFormatter {
       var nonZeroIndex = i + 1;
       if (nonZeroIndex <= 3) {
         if (nonZeroIndex % 3 == 0 && nonZeroIndex != text.length) {
-          buffer.write('-'); // Add double spaces.
+          buffer.write('-');
         }
       } else {
         if (nonZeroIndex % 7 == 0 &&

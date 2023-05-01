@@ -2,17 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:test_data/Allim/AllimPage.dart';
-import 'package:test_data/CameraTest.dart';
-import 'package:test_data/Notice/UserNoticePage.dart';
+import 'package:test_data/Calendar/ManagerCalendarPage.dart';
 import 'package:test_data/provider/ResidentProvider.dart';
 import 'package:test_data/provider/UserProvider.dart';
 import 'MainFacilitySettings/MainFacilitySetting.dart';
 import 'Notice/ManagerNoticePage.dart';
 import 'Supplementary/ThemeColor.dart';
 import 'Supplementary/PageRouteWithAnimation.dart';
-import 'Allim/UserAllimPage.dart';
-import 'Allim/ManagerAllimPage.dart';
-import 'VisitRequest/UserRequestPage.dart';
 import 'VisitRequest/ManagerRequestPage.dart';
 import 'AddPersonPage.dart';
 import 'Comment/UserCommentPage.dart';
@@ -177,6 +173,7 @@ class _MainPageState extends State<MainPage> {
         break;
       case 2:
         print('일정표 Tap');
+        pageAnimation(context, ManagerCalendarPage()); //일단은 요양보호사 버전으로
         break;
       case 3:
         print('면회신청 Tap');

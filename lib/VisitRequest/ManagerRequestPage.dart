@@ -48,11 +48,12 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
                 children: [
                   Row(
                     children: [
-                      Text(dateList[index]),
+                      Text(dateList[index]), //TODO: 면회 날짜
                       SizedBox(width: 10),
                       Icon(Icons.schedule_rounded, color: Colors.grey, size: 20),
                       SizedBox(width: 2),
-                      Text(timeList[index]),
+                      Text(timeList[index]), //TODO: 면회 시간
+                      const Spacer(),
                       OutlinedButton(
                         child: Text('수락'),
                         onPressed: (){
@@ -134,10 +135,10 @@ class _ManagerRequestPageState extends State<ManagerRequestPage> {
                       ),
                     ],
                   ),
-                  Text(personList[index]),
-                  Text(textList[index]),
+                  Text(personList[index]), //TODO: ㅇㅇㅇ 보호자님 출력
+                  Text(textList[index]), //TODO: 할 말 출력
                   Divider(thickness: 0.5),
-                  Text(subtextList[index], style: TextStyle(color: themeColor.getColor())),
+                  Text(subtextList[index], style: TextStyle(color: themeColor.getColor())), //TODO: 수락/거절 출력
                 ],
               )
           ),

@@ -61,108 +61,112 @@ class _SignupPageState extends State<SignupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        padding: EdgeInsets.all(50),
-        child: Form(
-          key: formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              TextFormField(
-                decoration: InputDecoration(labelText: '아이디'),
-                validator: (value) =>
-                value!.isEmpty ? '아이디를 입력해주세요.' : null,
-                onSaved: (value) => _id = value!,
-              ),
-              TextFormField(
-                obscureText: true,
-                decoration: InputDecoration(labelText: '비밀번호'),
-                validator: (value) =>
-                value!.isEmpty ? '비밀번호를 입력해주세요.' : null,
-                onSaved: (value) => _password = value!,
-              ),
-              TextFormField(
-                obscureText: true,
-                decoration: InputDecoration(labelText: '이름'),
-                validator: (value) =>
-                value!.isEmpty ? '이름을 입력해주세요.' : null,
-                onSaved: (value) => _username = value!,
-              ),
-              TextFormField(
-                obscureText: true,
-                decoration: InputDecoration(labelText: '전화번호'),
-                validator: (value) =>
-                value!.isEmpty ? '전화번호를 입력해주세요.' : null,
-                onSaved: (value) => _tel = value!,
-              ),
-              SizedBox(height: 30.0,),
-              ElevatedButton (
-                  child: Text(
-                    '가입하기',
-                    style: TextStyle(fontSize: 18.0),
+      body: ListView(
+        children: [
+          Container(
+            padding: EdgeInsets.all(50),
+            child: Form(
+              key: formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  TextFormField(
+                    decoration: InputDecoration(labelText: '아이디'),
+                    validator: (value) =>
+                    value!.isEmpty ? '아이디를 입력해주세요.' : null,
+                    onSaved: (value) => _id = value!,
                   ),
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.all(10),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    ),
+                  TextFormField(
+                    obscureText: true,
+                    decoration: InputDecoration(labelText: '비밀번호'),
+                    validator: (value) =>
+                    value!.isEmpty ? '비밀번호를 입력해주세요.' : null,
+                    onSaved: (value) => _password = value!,
                   ),
-                  onPressed: () async {
-                    if (validateAndSave() == true) {
-                      var data;
-                      //회원가입 요청
-                      try {
-                        data = await signUpRequest(_id, _password, _username, _tel);
-                      } catch(e) {
-                        String errorMessage = '';
+     TextFormField(
+                    obscureText: true,
+                    decoration: InputDecoration(labelText: '이름'),
+                    validator: (value) =>
+                    value!.isEmpty ? '이름을 입력해주세요.' : null,
+                    onSaved: (value) => _username = value!,
+                  ),
+                  TextFormField(
+                    obscureText: true,
+                    decoration: InputDecoration(labelText: '전화번호'),
+                    validator: (value) =>
+                    value!.isEmpty ? '전화번호를 입력해주세요.' : null,
+                    onSaved: (value) => _tel = value!,
+                  ),
+                  SizedBox(height: 30.0,),
+                  ElevatedButton (
+                      child: Text(
+                        '가입하기',
+                        style: TextStyle(fontSize: 18.0),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.all(10),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)
+                        ),
+                      ),
+                      onPressed: () async {
+                        if (validateAndSave() == true) {
+                          var data;
+                          //회원가입 요청
+                          try {
+                            data = await signUpRequest(_id, _password, _username, _tel);
+                          } catch(e) {
+                            String errorMessage = '';
 
-                        if (e.runtimeType == FormatException)  //중복된 아이디
-                          errorMessage = '중복된 아이디입니다';
-                        else 
-                          errorMessage = '회원가입에 실패하였습니다';
-                        
-                        
-                        showDialog(
-                            context: context,
-                            barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                content: Text(errorMessage),
-                                insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                                actions: [
-                                  TextButton(
-                                    child: const Text('확인'),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                ],
+                            if (e.runtimeType == FormatException)  //중복된 아이디
+                              errorMessage = '중복된 아이디입니다';
+                            else 
+                              errorMessage = '회원가입에 실패하였습니다';
+                            
+                            
+                            showDialog(
+                                context: context,
+                                barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    content: Text(errorMessage),
+                                    insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                                    actions: [
+                                      TextButton(
+                                        child: const Text('확인'),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                }
                               );
-                            }
-                          );
-                      }
+                          }
+                          
+                          var json_data = json.decode(data);
+
+                          if (json_data['user_id'] == null) {
+                            //회원가입 실패
+                          }
+
+                          Navigator.pop(context);
+                        }
+
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(builder: (context) => LoginPage()),
+                      // );
                       
-                      var json_data = json.decode(data);
-
-                      if (json_data['user_id'] == null) {
-                        //회원가입 실패
-                      }
-
-                      Navigator.pop(context);
+                      //pageAnimation(context, LoginPage());
                     }
-
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => LoginPage()),
-                    // );
-                    
-                    //pageAnimation(context, LoginPage());
-                  }
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
+            ),
+          )
+        ],
       ),
     );
   }

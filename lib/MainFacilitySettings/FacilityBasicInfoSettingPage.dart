@@ -74,22 +74,13 @@ class _FacilityBasicInfoPageState extends State<FacilityBasicInfoPage> {
                       ),
                     ),
                     Container(
-                      child: Text('경상북도 구미시', textScaleFactor: 1.2,),
+                      child: Text('경상북도 구미시 거의동 456-1', textScaleFactor: 1.2,),
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
                           color: Colors.white,
                           border: Border.all(color: Color(0xfff2f3f6),width: 2)
                       ),
                     ),
-                    Container(
-                      child: Text('거의동 456-1', textScaleFactor: 1.2,),
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(color: Color(0xfff2f3f6),width: 2)
-                      ),
-                    ),
-
                   ],
                 )
             ),

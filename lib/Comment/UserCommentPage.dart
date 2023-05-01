@@ -33,50 +33,44 @@ class _UserCommentPageState extends State<UserCommentPage> {
   Widget userCommentList(){
     return ListView(
       children: [
-        Container(
-          child: ListView.separated(
-          itemCount: com.length,
+         ListView.separated(
+            itemCount: com.length,
             shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
             itemBuilder: (context, index){
-              return InkWell(
-                onTap: (){
-                  print(index);
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      color: Colors.white),
-                  height: 130,
-                  padding: EdgeInsets.all(10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Text(date[index]),
-                          Spacer(),
-                          Container(
-                            padding: EdgeInsets.all(4),
-                            child: OutlinedButton(
-                                onPressed: (){
-                                  //삭제
-                                },
-                                child: Text('삭제')
-                            ),
+              return Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Colors.white),
+                height: 130,
+                padding: EdgeInsets.all(10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(date[index]),
+                        Spacer(),
+                        Container(
+                          padding: EdgeInsets.all(4),
+                          child: OutlinedButton(
+                              onPressed: (){
+                                //삭제
+                              },
+                              child: Text('삭제')
                           ),
-                        ],
-                      ),
-                      Text(
-                        com[index],
-                        style: TextStyle(fontSize: 15,),
-                      ),
-                    ],
-                  ),
+                        ),
+                      ],
+                    ),
+                    Text(
+                      com[index],
+                      style: TextStyle(fontSize: 15,),
+                    ),
+                  ],
                 ),
               );
             }, separatorBuilder: (BuildContext context, int index) => const Divider(height: 9, color: Color(0xfff8f8f8),),  //구분선(height로 상자 사이 간격을 조절)
           ),
-        )
       ],
     );
   }

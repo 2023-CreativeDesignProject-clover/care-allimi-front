@@ -30,8 +30,8 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
         children: [
 
 
-          importantNotice(),
-          SizedBox(height: 15),
+          //importantNotice(),
+          //SizedBox(height: 15),
           noticeList(),
 
 
@@ -89,6 +89,8 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    getGreyTag(),  //태그
+                    SizedBox(height: 5),
                     Container(
                         child: Text(titleList[index], overflow: TextOverflow.ellipsis), //공지사항 제목
                         width: MediaQuery.of(context).size.width * 0.5),
@@ -114,6 +116,28 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
       separatorBuilder: (context, index) {
         return const SizedBox(height: 8);
       },
+    );
+  }
+
+  Widget getRedTag() {
+    return Container(
+      padding: EdgeInsets.fromLTRB(7, 3, 7, 3),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(3),
+        color: Color(0xffffe9e9),
+      ),
+      child: Text('중요', textScaleFactor: 0.85, style: TextStyle(color: Color(0xffed3939))),
+    );
+  }
+
+  Widget getGreyTag() {
+    return Container(
+      padding: EdgeInsets.fromLTRB(7, 3, 7, 3),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(3),
+          color: Color(0xfff2f3f5),
+        ),
+        child: Text('공지사항', textScaleFactor: 0.85, style: TextStyle(color: Color(0xff6d767f))),
     );
   }
 
