@@ -6,7 +6,7 @@ import 'package:test_data/provider/UserProvider.dart';
 import '/Allim/WriteAllimPage.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 import 'ManagerSecondAllimPage.dart';
-import '/NoticeModel.dart';
+// import '/NoticeModel.dart';
 
 class AllimPage extends StatefulWidget {
 

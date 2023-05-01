@@ -53,6 +53,9 @@ Future<String> loginRequest(String id, String password) async {
     }),
   );
 
+  if (response.statusCode != 200)
+    throw Exception();
+
   //"user_id": 1,
   // "userRole": "PROTECTOR"
 
@@ -140,28 +143,46 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   onPressed: () async {
                     if (validateAndSave() == true) {
+                      var data;
                       //로그인
-                      var data = await loginRequest(_id, _password);
-                      var json_data = json.decode(data);
- 
-                      if (json_data['user_id'] == null)//회원가입 필요, user가 없다!
+                      try {
+                        data = await loginRequest(_id, _password);
+                      } catch(e) {
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              content: Text("아이디 또는 패스워드가 일치하지 않습니다"),
+                              insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                              actions: [
+                                TextButton(
+                                  child: const Text('확인'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          }
+                        );
                         return;
+                      }
+
+                      var json_data = json.decode(data);
 
                       debugPrint(json_data.toString());
+ 
 
                       //유저정보 받아오기
                       var userData = await getUserInfo(json_data['user_id']);
                       var jsonUserData = json.decode(userData);
-
-                      debugPrint(jsonUserData.toString());
 
                       var userRole = '';
                       if (json_data['userRole'] != null) {
                         userRole = json_data['userRole'];
                         var residentData = await getResidentInfo(json_data['user_id']);
                         var jsonResidentData = json.decode(residentData);
-
-                        debugPrint(jsonResidentData.toString());
 
                         Provider.of<ResidentProvider>(context, listen:false)
                           .setInfo(jsonResidentData['nhr_id'], jsonResidentData['facility_id'], jsonResidentData['facility_name'], jsonResidentData['resident_name'],
