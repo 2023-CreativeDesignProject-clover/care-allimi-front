@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:test_data/Invite/InviteWaitPage.dart';
 import 'package:test_data/LoginPage.dart';
+import 'package:test_data/provider/AllimTempProvider.dart';
 import 'package:test_data/provider/ResidentProvider.dart';
 import 'package:test_data/provider/UserProvider.dart';
 import 'Supplementary/ThemeColor.dart';
@@ -17,9 +18,10 @@ void main() async {
     //Provider 등록
       MultiProvider(providers: [
         ChangeNotifierProvider(create: (_) => UserProvider()),
-        ChangeNotifierProvider(create: (_) => ResidentProvider())
+        ChangeNotifierProvider(create: (_) => ResidentProvider()),
+        ChangeNotifierProvider(create: (_) => AllimTempProvider())
       ],
-          child: const MyApp())
+      child: const MyApp())
   );
 }
 

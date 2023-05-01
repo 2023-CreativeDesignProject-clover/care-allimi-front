@@ -10,7 +10,6 @@ import 'package:http/http.dart' as http; //http 사용
 
 String backendUrl = "http://13.125.155.244:8080/v2/";
 
-
 //입소자 정보 입력 화면
 class ResidentInfoInputPage extends StatefulWidget {
 
@@ -71,8 +70,6 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
   }
 
   Future<String> addResident(int uid) async {
-
-    
     if (_isHighBloodPress) 
       healthInfo += "고혈압\n";
     

@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:test_data/provider/AllimTempProvider.dart';
 
 class AllimFirstDropdown extends StatefulWidget {
-  const AllimFirstDropdown({Key? key}) : super(key: key);
+  const AllimFirstDropdown({
+    Key? key,
+    required this.menu
+  }) : super(key: key);
+
+  final String menu;
 
   @override
   State<AllimFirstDropdown> createState() => _AllimFirstDropdownState();
@@ -11,11 +18,14 @@ class _AllimFirstDropdownState extends State<AllimFirstDropdown> {
   final items = ['금식', '전량섭취', '반량섭취'];
   String? selectedValue;
 
+  String menu = '';
+
   @override
   void initState() {
     super.initState();
     setState(() {
       selectedValue = items[0];
+      menu = widget.menu;
     });
   }
 
@@ -28,7 +38,19 @@ class _AllimFirstDropdownState extends State<AllimFirstDropdown> {
         items: items.map((e) => DropdownMenuItem(
             value: e,
             child: Text(e))).toList(),
-        onChanged: (value) {setState(() => selectedValue = value!);},
+        onChanged: (value) {
+          setState(() => selectedValue = value!);
+          if (menu == '아침') {
+            Provider.of<AllimTempProvider>(context, listen: false)
+              .setMorning(value);
+          }else if (menu == '점심') {
+            Provider.of<AllimTempProvider>(context, listen: false)
+              .setLaunch(value);
+          }else if (menu == '저녁') {
+            Provider.of<AllimTempProvider>(context, listen: false)
+              .setDinner(value);
+          }
+        },
       ),
     );
   }
@@ -66,7 +88,11 @@ class _AllimSecondDropdownState extends State<AllimSecondDropdown> {
         items: items.map((e) => DropdownMenuItem(
             value: e,
             child: Text(e))).toList(),
-        onChanged: (value) {setState(() => selectedValue = value!);},
+        onChanged: (value) {
+          setState(() => selectedValue = value!);
+          Provider.of<AllimTempProvider>(context, listen: false)
+              .setMedication(value);
+        },
       ),
     );
   }
