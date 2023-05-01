@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import '/Allim/WriteAllimPage.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 import 'ManagerSecondAllimPage.dart';
-import '/NoticeModel.dart';
+// import '/NoticeModel.dart';
+import 'dart:convert';
+import '/AllimModel.dart';
 
 class ManagerAllimPage extends StatefulWidget {
 
@@ -12,6 +14,7 @@ class ManagerAllimPage extends StatefulWidget {
   }
 }
 class ManagerAllimPageState extends State<ManagerAllimPage>{
+
   static List<String> noticeWho = [
     '삼족오 보호자님',
     '사족오 보호자님',
@@ -36,8 +39,8 @@ class ManagerAllimPageState extends State<ManagerAllimPage>{
     'assets/images/cake.jpg',
 
   ];
-  final List<Notice> noticeData = List.generate(noticeDetail.length, (index) =>
-      Notice(noticeDate[index], noticeDetail[index], noticeimgPath[index]));
+  final List<Allim> noticeData = List.generate(noticeDetail.length, (index) =>
+      Allim(noticeDate[index], noticeDetail[index], noticeimgPath[index]));
 
   @override
   Widget build(BuildContext context) {

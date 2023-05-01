@@ -1,15 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:test_data/Invite/InviteWaitPage.dart';
+import 'package:test_data/LoginPage.dart';
+import 'package:test_data/provider/ResidentProvider.dart';
+import 'package:test_data/provider/UserProvider.dart';
 import 'Supplementary/ThemeColor.dart';
 import 'MainPage.dart';
 import 'Setup/SetupPage.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
-
 ThemeColor themeColor = ThemeColor();
 
 void main() async {
   await initializeDateFormatting();
-  runApp(const MyApp());
+    runApp(
+    //Provider 등록
+      MultiProvider(providers: [
+        ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => ResidentProvider())
+      ],
+          child: const MyApp())
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -20,7 +31,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   var _curIndex = 0;
 
   @override
@@ -47,28 +57,39 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: getPage(),
-        bottomNavigationBar: Container(
-          decoration: BoxDecoration(border: Border(top: BorderSide(color: Colors.black12, width: 0.5))),
-          child: BottomNavigationBar(
-            onTap: (index) {
-              setState(() {
-                _curIndex = index;
-              });
-            },
-            currentIndex: _curIndex,
-            unselectedItemColor: Colors.grey,
-            selectedItemColor: themeColor.getColor(),
-            elevation: 0,
-            backgroundColor: Colors.white,
-            selectedFontSize: 12,
-            items: [
-              BottomNavigationBarItem(icon: Icon(Icons.home_rounded), label: '홈'),
-              BottomNavigationBarItem(icon: Icon(Icons.settings_rounded), label: '설정'),
-            ],
-          ),
-        ),
+      home: Consumer2<UserProvider, ResidentProvider>(
+        builder: (context, userProvider, residentProvider, child) {
+          if (userProvider.uid == 0) {
+            return LoginPage();
+          } else if (userProvider.urole == '') {
+            return InviteWaitPage();
+          } else {
+            debugPrint("@@@@@@@@@@" + userProvider.urole);
+            return Scaffold(
+              body: getPage(),
+              bottomNavigationBar: Container(
+                decoration: BoxDecoration(border: Border(top: BorderSide(color: Colors.black12, width: 0.5))),
+                child: BottomNavigationBar(
+                  onTap: (index) {
+                    setState(() {
+                      _curIndex = index;
+                    });
+                  },
+                  currentIndex: _curIndex,
+                  unselectedItemColor: Colors.grey,
+                  selectedItemColor: themeColor.getColor(),
+                  elevation: 0,
+                  backgroundColor: Colors.white,
+                  selectedFontSize: 12,
+                  items: [
+                    BottomNavigationBarItem(icon: Icon(Icons.home_rounded), label: '홈'),
+                    BottomNavigationBarItem(icon: Icon(Icons.settings_rounded), label: '설정'),
+                  ],
+                ),
+              ),
+            );
+          }
+        }
       ),
     );
   }

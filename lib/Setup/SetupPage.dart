@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:test_data/provider/UserProvider.dart';
 import '../AddFacilities.dart';
 import '/Supplementary/ThemeColor.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
@@ -72,12 +74,19 @@ class _SetupPageState extends State<SetupPage> {
                         onPressed: () {
                           Navigator.pop(context);
                         }),
-                    TextButton(child: Text('예',
-                      style: TextStyle(color: themeColor.getMaterialColor())),
-                        onPressed: () {
-                      Navigator.pop(context);
-                      //TODO: 로그아웃 실행
-                    }),
+                    Consumer<UserProvider>(
+                      builder: (context, userProvider, child) {
+                        return TextButton(child: Text('예',
+                          style: TextStyle(color: themeColor.getMaterialColor())),
+                            onPressed: () {
+                              userProvider.logout();
+                              userProvider.getData();
+                          Navigator.pop(context);
+                          //TODO: 로그아웃 실행
+                          
+                        });
+                      }
+                    ),
                   ],
                 ),
           );
