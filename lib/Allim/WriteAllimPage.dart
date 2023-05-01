@@ -1,7 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:test_data/provider/ResidentProvider.dart';
+import 'package:test_data/provider/UserProvider.dart';
 import '/Supplementary/ThemeColor.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 import '/Supplementary/DropdownWidget.dart';
+import 'dart:convert';
+import 'dart:io';
+import 'package:http_parser/http_parser.dart';
+import 'package:dio/dio.dart';
+import 'package:dotted_border/dotted_border.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http; //http 사용
+
+String backendUrl = "http://3.36.73.115:8080/v2/";
 
 ThemeColor themeColor = ThemeColor();
 
@@ -14,6 +27,7 @@ List<String> imgList = [
   'assets/images/tree.jpg'
 ];
 
+
 class WriteAllimPage extends StatefulWidget {
   const WriteAllimPage({Key? key}) : super(key: key);
 
@@ -25,29 +39,112 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
 
   final formKey = GlobalKey<FormState>();
   String selectedPerson = "수급자 선택";
+  int selectedPersonId = 0;
+  final ImagePicker _picker = ImagePicker();
+  String _contents = '';
+  String _subContents = '금식\n금식\n금식\n해당 사항 없음';
+
+  List<XFile> _pickedImgs = [];
+  List<Map<String, dynamic>> _notices = []; // 수정된 부분
+
+  Future<void> getFacilityResident(int facilityId) async {
+    http.Response response = await http.get(
+      Uri.parse(backendUrl + "nhresidents/admin/" + facilityId.toString()),
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Accept-Charset': 'utf-8'
+      }
+    );
+
+    var data =  utf8.decode(response.bodyBytes);
+    dynamic decodedJson = json.decode(data);
+    List<Map<String, dynamic>> parsedJson = List<Map<String, dynamic>>.from(decodedJson);
+
+    setState(() {
+      _notices =  parsedJson;
+    });
+  }
+
+
+  Future<void> _pickImg() async { // 앨범
+    final List<XFile>? images = await _picker.pickMultiImage();
+    if (images != null) {
+      setState(() {
+        _pickedImgs.addAll(images);
+      });
+    }
+  }
+
+  Future<void> _takeImg() async { // 카메라
+    final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+    if (image != null) {
+      setState(() {
+        _pickedImgs.add(image);
+      });
+    }
+  }
+
+  // 서버에 이미지 업로드
+  Future<void> imageUpload(userId, facilityId) async {
+    final List<MultipartFile> _files = _pickedImgs.map((img) => MultipartFile.fromFileSync(img.path, contentType: MediaType("image", "jpg"))).toList();
+
+    debugPrint(userId + "  " + selectedPersonId + "   " + facilityId);
+
+    var formData = FormData.fromMap({
+      "notice": MultipartFile.fromString(
+        jsonEncode(
+          {"user_id": userId, "nhresident_id": selectedPersonId, "facility_id": facilityId, 
+           "contents": _contents, "sub_contents": "test입니다."}),
+        contentType: MediaType.parse('application/json'),
+      ),
+      "file": _files
+    });
+
+    var dio = Dio();
+    dio.options.contentType = 'multipart/form-data';
+    final response = await dio.post(backendUrl + 'notices', data: formData); // ipConfig -> IPv4 주소, TODO: 실제 주소로 변경해야 함
+
+    if (response.statusCode == 200) {
+      print("성공");
+    } else {
+      print("실패");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return customPage(
-      title: '알림장 작성',
-      onPressed: () {
-        print('알림장 작성 완료버튼 누름');
+    return Consumer2<UserProvider, ResidentProvider> (
+      builder: (context, userProvider, residentProvider, child) {
+        return customPage(
+          title: '알림장 작성',
+          onPressed: () async {
+            print('알림장 작성 완료버튼 누름');
 
-        if(this.formKey.currentState!.validate()) {
+            if(this.formKey.currentState!.validate()) {
+              this.formKey.currentState!.save();
 
-          //TODO: 알림장 작성 완료 버튼 누르면 실행되어야 하는 부분
+              if (selectedPersonId == 0) {
+                //에러처리
+                
+              }
+              
+              await imageUpload(userProvider.uid, residentProvider.facility_id);
+              _pickedImgs = [];
+              setState(() {});
+              //TODO: 알림장 작성 완료 버튼 누르면 실행되어야 하는 부분
 
-          Navigator.pop(context);
-        }},
-      body: writePost(),
-      buttonName: '완료',
+              Navigator.pop(context);
+            }},
+          body: writePost(),
+          buttonName: '완료',
+        );
+      }
     );
   }
 
   Widget writePost() {
     return ListView(
       children: [
-
         //TODO: 수급자 선택
         createPersonCard(),
         SizedBox(height: 8),
@@ -92,7 +189,6 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
         ),
       ),
       onTap: () {
-
         print('수급자 선택하기 Tap');
 
         //TODO: 수급자 선택 화면
@@ -119,32 +215,45 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
           ),
           Container(
             color: Colors.white,
-            child: ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: textPerson.length,
-              itemBuilder: (BuildContext context, int index) {
-                return ListTile(
-                  leading: Icon(Icons.person_rounded, color: Colors.grey),
-                  title: Row(
-                    children: [
-                      Text('${textPerson[index]} 님'), //TODO: 수급자 이름 리스트
-                    ],
-                  ),
-                  onTap: () {
-                    print('수급자 이름 ${textPerson[index]} Tap');
+            child: Consumer<ResidentProvider>(
+              builder: (context, residentProvider, child) {
+                return FutureBuilder(
+                  future: getFacilityResident(residentProvider.facility_id),
+                  builder: (context, snapshot) {
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: _notices.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return ListTile(
+                          leading: Icon(Icons.person_rounded, color: Colors.grey),
+                          title: Row(
+                            children: [
+                              Text('${_notices[index]['name']} 님'), //TODO: 수급자 이름 리스트
+                              // Text('${textPerson[index]} 님'), //TODO: 수급자 이름 리스트
+                            ],
+                          ),
+                          onTap: () {
+                            print('수급자 이름 ${_notices[index]['name']} Tap');
 
-                    // TODO: 수급자 선택 시 처리할 이벤트
-                    setState(() {
-                      if(selectedPerson != null){ selectedPerson = '${textPerson[index]} 님'; }
-                      else { selectedPerson = '수급자 선택'; }
-                    });
+                            // TODO: 수급자 선택 시 처리할 이벤트
+                            setState(() {
+                              if(selectedPerson != null){ 
+                                selectedPerson = '${_notices[index]['name']} 님'; 
+                                selectedPersonId = _notices[index]['id'];
+                              }
+                              else { selectedPerson = '수급자 선택'; }
+                            });
 
-                    Navigator.pop(context);
+                            Navigator.pop(context);
 
-                  },
+                          },
+                        );
+                      },
+                    );
+                  }
                 );
-              },
+              }
             ),
           ),
         ],
@@ -171,8 +280,11 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
             border: InputBorder.none,
             focusedBorder: InputBorder.none,
           ),
+          onSaved: (value) {
+            _contents = value!;
+          } ,
         ),
-      ),
+      )
     );
   }
 
@@ -244,12 +356,14 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
                       children: [
                         ListTile(leading: Icon(Icons.camera_alt, color: Colors.grey), title: Text('카메라'),
                           onTap: () {
-                            //TODO: 카메라 누르면 실행되어야 할 부분
+                            Navigator.pop(context);
+                            _takeImg();
                           },
                         ),
                         ListTile(leading: Icon(Icons.photo_library, color: Colors.grey), title: Text('갤러리'),
                           onTap: () {
-                            //TODO: 갤러리 누르면 실행되어야 할 부분
+                            Navigator.pop(context);
+                            _pickImg();
                           },
                         ),
                       ],

@@ -1,6 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:test_data/provider/ResidentProvider.dart';
 import '../Supplementary/PageRouteWithAnimation.dart';
 import '/Supplementary/ThemeColor.dart';
+import 'package:http/http.dart' as http; //http 사용
 
 ThemeColor themeColor = ThemeColor();
 
@@ -13,6 +18,9 @@ List<String> imgList = [
   ''
 ];
 
+String backendUrl = "http://3.36.73.115:8080/v2/";
+
+
 class UserNoticePage extends StatefulWidget {
   const UserNoticePage({Key? key}) : super(key: key);
 
@@ -21,20 +29,49 @@ class UserNoticePage extends StatefulWidget {
 }
 
 class _UserNoticePageState extends State<UserNoticePage> {
+
+  List<Map<String, dynamic>> _notices = []; // 수정된 부분
+
+  Future<void> _getNotice(int residentId) async {
+    http.Response response = await http.get(
+      Uri.parse(backendUrl + "notices/" + residentId.toString()),
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Accept-Charset': 'utf-8'
+      }
+    );
+
+    // "user_name": "string", "phone_num": "string", "login_id": "string"
+    var data =  utf8.decode(response.bodyBytes);
+    dynamic decodedJson = json.decode(data);
+    List<Map<String, dynamic>> parsedJson = List<Map<String, dynamic>>.from(decodedJson);
+
+    setState(() {
+      _notices = parsedJson;
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('공지사항')),
-      body: ListView(
-        children: [
-
-
-          importantNotice(),
-          SizedBox(height: 15),
-          noticeList(),
-
-
-        ],
+      body: Consumer<ResidentProvider>(
+        builder: (context, residentProvider, child) {
+          return FutureBuilder(
+            future: _getNotice(residentProvider.resident_id),
+            builder: (context, snap) {
+              if (snap.hasData) {
+                return ListView(
+                  children: [
+                    noticeList(),
+                  ],
+                );
+               }
+              return Container();
+            }
+          );
+        }
       ),
       //floatingActionButton: ,
     );
@@ -48,36 +85,37 @@ class _UserNoticePageState extends State<UserNoticePage> {
     );
   }
 
-  //중요 공지 출력
-  Widget importantNotice() {
-    return ListView.builder(
-      itemCount: temp.length, //중요 공지 출력 개수
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      itemBuilder: (context, index) {
-        return Container(
-          height: 50,
-          //padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-          color: Colors.white,
-          child: ListTile(
-            leading: Text('중요', style: TextStyle(color: themeColor.getColor(), fontWeight: FontWeight.bold)),
-            title: textNotice(temp[index]),
-            onTap: () {
-              print('${temp[index]} Tap');
-            },
-          ),
-        );
-      },
-    );
-  }
+  // //중요 공지 출력
+  // Widget importantNotice() {
+  //   return ListView.builder(
+  //     itemCount: temp.length, //중요 공지 출력 개수
+  //     shrinkWrap: true,
+  //     physics: NeverScrollableScrollPhysics(),
+  //     itemBuilder: (context, index) {
+  //       return Container(
+  //         height: 50,
+  //         //padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+  //         color: Colors.white,
+  //         child: ListTile(
+  //           leading: Text('중요', style: TextStyle(color: themeColor.getColor(), fontWeight: FontWeight.bold)),
+  //           title: textNotice(temp[index]),
+  //           onTap: () {
+  //             print('${temp[index]} Tap');
+  //           },
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
   //공지사항 목록
   Widget noticeList() {
     return ListView.separated(
-      itemCount: titleList.length, //공지 목록 출력 개수
+      itemCount: _notices.length, //공지 목록 출력 개수
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
+
         return Container(
           padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
           color: Colors.white,
@@ -89,7 +127,7 @@ class _UserNoticePageState extends State<UserNoticePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                        child: Text(titleList[index], overflow: TextOverflow.ellipsis), //공지사항 제목
+                        child: Text(_notices[index][''], overflow: TextOverflow.ellipsis), //공지사항 제목
                         width: MediaQuery.of(context).size.width * 0.5),
                     Text(dateList[index]), //공지사항 날짜
                   ],

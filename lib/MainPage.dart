@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:test_data/Allim/AllimPage.dart';
+import 'package:test_data/CameraTest.dart';
 import 'package:test_data/Notice/UserNoticePage.dart';
+import 'package:test_data/provider/ResidentProvider.dart';
+import 'package:test_data/provider/UserProvider.dart';
 import 'MainFacilitySettings/MainFacilitySetting.dart';
 import 'Notice/ManagerNoticePage.dart';
 import 'Supplementary/ThemeColor.dart';
@@ -11,6 +16,7 @@ import 'VisitRequest/UserRequestPage.dart';
 import 'VisitRequest/ManagerRequestPage.dart';
 import 'AddPersonPage.dart';
 import 'Comment/UserCommentPage.dart';
+import 'package:http/http.dart' as http; //http 사용
 
 ThemeColor themeColor = ThemeColor();
 
@@ -27,6 +33,7 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    // return pickImages();
     return Scaffold(
       backgroundColor: Color(0xfff8f8f8), //배경색
       appBar: AppBar(
@@ -45,7 +52,6 @@ class _MainPageState extends State<MainPage> {
       ),
     );
   }
-
 
   //소속추가 버튼
   Widget addGroup() {
@@ -87,17 +93,22 @@ class _MainPageState extends State<MainPage> {
         children: [
           Text('🏡', style: GoogleFonts.notoColorEmoji(fontSize: 50)),
           SizedBox(width: 10),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('금오요양원', textScaleFactor: 1.4, style: TextStyle(fontWeight: FontWeight.bold)), //TODO: 요양원 이름
-              Text('삼족오 보호자님'), //TODO: 내 역할
-            ],
+          Consumer2<UserProvider, ResidentProvider>(
+            builder: (context, userProvider, residentProvider, child) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(residentProvider.facility_name, textScaleFactor: 1.4, style: TextStyle(fontWeight: FontWeight.bold)), //TODO: 요양원 이름
+                  Text(userProvider.name + ' 보호자님(' + residentProvider.resident_name + '님'), //TODO: 내 역할
+                ],
+              );
+            }
           ),
         ],
       ),
     );
+     
   }
 
   //현재 선택된 요양원 출력
@@ -116,36 +127,40 @@ class _MainPageState extends State<MainPage> {
 
   //메뉴 리스트 출력
   Widget menuList(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.fromLTRB(11,0,11,0),
-      child: GridView.builder(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemCount: textMenu.length, //총 몇 개 출력할 건지
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3, //한 행에 몇 개 출력할 건지
-            childAspectRatio: 2/2.2, //가로세로 비율
-            mainAxisSpacing: 1,
-            crossAxisSpacing: 1,
-          ),
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () { onButtonTap(index); },
-              child: Card(
-                elevation: 0,
-                color: Colors.white,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(textEmoji[index], style: GoogleFonts.notoColorEmoji(fontSize: 30)),
-                    SizedBox(height: 5),
-                    Text(textMenu[index], textScaleFactor: 1.05,),
-                  ],
-                ),
+    return Consumer<UserProvider>(
+      builder: (context, userProvider, child) {
+        return Container(
+          padding: EdgeInsets.fromLTRB(11,0,11,0),
+          child: GridView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: (userProvider.urole == 'PROTECTER')?textMenu.length-1: textMenu.length, //총 몇 개 출력할 건지: 보호자면 하나 뺌
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3, //한 행에 몇 개 출력할 건지
+                childAspectRatio: 2/2.2, //가로세로 비율
+                mainAxisSpacing: 1,
+                crossAxisSpacing: 1,
               ),
-            );
-          }
-      ),
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () { onButtonTap(index); },
+                  child: Card(
+                    elevation: 0,
+                    color: Colors.white,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(textEmoji[index], style: GoogleFonts.notoColorEmoji(fontSize: 30)),
+                        SizedBox(height: 5),
+                        Text(textMenu[index], textScaleFactor: 1.05,),
+                      ],
+                    ),
+                  ),
+                );
+              }
+          ),
+        );
+      }
     );
   }
 
@@ -158,7 +173,7 @@ class _MainPageState extends State<MainPage> {
         break;
       case 1:
         print('알림장 Tap');
-        pageAnimation(context, ManagerAllimPage()); //일단은 요양보호사 버전으로
+        pageAnimation(context, AllimPage()); //요양보호사 버전, user버전 알아서 찾아감
         break;
       case 2:
         print('일정표 Tap');
@@ -179,4 +194,5 @@ class _MainPageState extends State<MainPage> {
         break;
     }
   }
+
 }

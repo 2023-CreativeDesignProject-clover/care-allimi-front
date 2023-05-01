@@ -16,6 +16,11 @@ dependencies:
   twemoji: ^0.4.3
   google_fonts: ^4.0.3
   table_calendar: ^3.0.9
+  provider: ^6.0.4
+
+  image_picker: ^0.8.7+4
+  dotted_border: ^2.0.0+3
+  dio: ^5.1.1
 
 dev_dependencies:
   flutter_test:

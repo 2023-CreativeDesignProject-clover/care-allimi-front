@@ -3,6 +3,7 @@ import '/Allim/WriteAllimPage.dart';
 import '/Supplementary/PageRouteWithAnimation.dart';
 import 'ManagerSecondAllimPage.dart';
 import '/NoticeModel.dart';
+import 'dart:convert';
 
 class ManagerAllimPage extends StatefulWidget {
 
@@ -12,6 +13,7 @@ class ManagerAllimPage extends StatefulWidget {
   }
 }
 class ManagerAllimPageState extends State<ManagerAllimPage>{
+
   static List<String> noticeWho = [
     '삼족오 보호자님',
     '사족오 보호자님',
