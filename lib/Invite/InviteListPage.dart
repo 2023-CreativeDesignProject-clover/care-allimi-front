@@ -23,7 +23,7 @@ class _InviteListPageState extends State<InviteListPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       floatingActionButton: inviteButton(),
-      appBar: AppBar(title: Text('시설 설정')),
+      appBar: AppBar(title: Text('초대 목록')),
       body: appInviteList(),
     );
   }
@@ -35,17 +35,8 @@ class _InviteListPageState extends State<InviteListPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-              padding: EdgeInsets.only(left: 18,top: 12),
-              child: Text(
-                '초대 목록',
-                style: TextStyle(
-                    fontSize: 18
-                ),
-              ),
-            ),
             inviteList(),
-
+            SizedBox(height: 80,)
           ],
         )
       ],
@@ -68,12 +59,15 @@ class _InviteListPageState extends State<InviteListPage> {
                 Text('${invitelistDate[index]}'), //초대 리스트
                 Spacer(),
                 Container(
-                  padding: EdgeInsets.all(3),
+                  padding: EdgeInsets.all(2),
                   child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                          side: BorderSide(color: themeColor.getColor(),)
+                      ),
                       onPressed: (){
                         //취소
                       },
-                      child: Text('취소하기')
+                      child: Text('취소하기',style: TextStyle(color: themeColor.getColor(),),)
                   ),
                 ),
               ],
