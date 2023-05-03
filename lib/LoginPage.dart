@@ -30,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
       body: ListView(
         children: [
           Container(
-            padding: EdgeInsets.all(50),
+            padding: EdgeInsets.all(40),
             child: Form(
               key: formKey,
               child: Column(
@@ -38,14 +38,23 @@ class _LoginPageState extends State<LoginPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   TextFormField(
-                    decoration: InputDecoration(labelText: '아이디'),
+                    decoration: InputDecoration(
+                      icon: Icon(Icons.person_rounded),
+                      hintText: '아이디',
+                      border: OutlineInputBorder(),
+                    ),
                     validator: (value) =>
                     value!.isEmpty ? '아이디를 입력해주세요.' : null,
                     onSaved: (value) => _id = value!,
                   ),
+                  SizedBox(height: 5,),
                   TextFormField(
                     obscureText: true,
-                    decoration: InputDecoration(labelText: '비밀번호'),
+                    decoration: InputDecoration(
+                      icon: Icon(Icons.lock),
+                      hintText: '비밀번호',
+                      border: OutlineInputBorder(),
+                    ),
                     validator: (value) =>
                     value!.isEmpty ? '비밀번호를 입력해주세요.' : null,
                     onSaved: (value) => _password = value!,

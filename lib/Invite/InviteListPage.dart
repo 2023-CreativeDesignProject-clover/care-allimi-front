@@ -46,7 +46,7 @@ class _InviteListPageState extends State<InviteListPage> {
   //이름 나오는 부분
   Widget inviteList(){
     return Container(
-      padding: EdgeInsets.only(left: 10, top: 10, right: 5),
+      padding: EdgeInsets.only(left: 5, top: 10,),
       child: ListView.builder(
         shrinkWrap: true,
         physics: NeverScrollableScrollPhysics(),

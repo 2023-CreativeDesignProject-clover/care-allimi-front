@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:test_data/Invite/InviteWaitPage.dart';
+import 'package:test_data/LoginPage.dart';
+import 'package:test_data/ResidentInfoInputPage.dart';
 import '/MainFacilitySettings/FacilityBasicInfoSettingPage.dart';
 import '/Invite/InviteListPage.dart';
 import 'PeopleManagementPage.dart';
@@ -29,7 +32,12 @@ class _MainFacilitySettingsPageState extends State<MainFacilitySettingsPage> {
               appInvite(),
               Divider(thickness: 0.5,),
               appFacilityBasicSetting(),
+              Divider(thickness: 3,),
+              Test(),
               Divider(thickness: 0.5,),
+              Test2(),
+              Divider(thickness: 0.5,),
+              Test3()
             ],
           )
         ],
@@ -74,6 +82,37 @@ class _MainFacilitySettingsPageState extends State<MainFacilitySettingsPage> {
         trailing: Icon(Icons.arrow_forward_ios_sharp, color: Colors.grey),
         onTap: () {
           pageAnimation(context, FacilityBasicInfoPage());
+        });
+  }
+
+
+
+
+  Widget Test() {
+    return ListTile(
+        visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+        title: Text('로그인 테스트'),
+        trailing: Icon(Icons.arrow_forward_ios_sharp, color: Colors.grey),
+        onTap: () {
+          pageAnimation(context, LoginPage());
+        });
+  }
+  Widget Test2() {
+    return ListTile(
+        visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+        title: Text('초대대기 테스트'),
+        trailing: Icon(Icons.arrow_forward_ios_sharp, color: Colors.grey),
+        onTap: () {
+          pageAnimation(context, InviteWaitPage());
+        });
+  }
+  Widget Test3() {
+    return ListTile(
+        visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+        title: Text('입소자정보입력 테스트'),
+        trailing: Icon(Icons.arrow_forward_ios_sharp, color: Colors.grey),
+        onTap: () {
+          pageAnimation(context, ResidentInfoInputPage());
         });
   }
 

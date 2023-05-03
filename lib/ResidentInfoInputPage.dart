@@ -20,7 +20,7 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
   bool _isHeartAttack = false;
   bool _isHeartDisease = false;
   bool _isEtc = false;
-
+  //bool _isDisabled = true;
   List<String> checkList = [];
 
   void validateAndSave() {
@@ -35,6 +35,7 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: ListView(
         children: [
@@ -71,6 +72,7 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         TextFormField(
+                          keyboardType: TextInputType.text,
                           decoration: InputDecoration(labelText: '이름'),
                           validator: (value) =>
                           value!.isEmpty ? '이름을 입력해주세요.' : null,
@@ -141,7 +143,7 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
                           ],
                         ),
                         Row(
-                          children: [
+                          children: <Widget>[
                             Checkbox(
                               value: _isEtc,
                               onChanged: (value) {
@@ -150,10 +152,20 @@ class _ResidentInfoInputPageState extends State<ResidentInfoInputPage> {
                                 });
                               },
                             ),
-                            Text("기타"),
+                            Text("기타", textAlign: TextAlign.left),
+                            SizedBox(width: 10,),
+                            Container(
+                              child: Flexible(
+                                child: TextFormField(
+                                  //enabled: !_isDisabled,
+                                  decoration: InputDecoration(
+                                    isDense: true
+                                  ),
+                                ),
+                              ),
+                            ),
                           ],
                         ),
-                        TextField() //TODO: 기타 옆에 textfield를 넣고 싶음
                       ],
                     ),
                   ),
