@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'LoginPage.dart';
 import 'Supplementary/PageRouteWithAnimation.dart';
 import 'package:http/http.dart' as http; //http 사용
@@ -64,7 +65,7 @@ class _SignupPageState extends State<SignupPage> {
       body: ListView(
         children: [
           Container(
-            padding: EdgeInsets.all(50),
+            padding: EdgeInsets.all(40),
             child: Form(
               key: formKey,
               child: Column(
@@ -72,28 +73,54 @@ class _SignupPageState extends State<SignupPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   TextFormField(
-                    decoration: InputDecoration(labelText: '아이디'),
+                    decoration: InputDecoration(
+                        // prefixIcon: Padding(
+                        //   padding: EdgeInsets.only(top: 15),
+                        //   child: Icon(Icons.person_rounded, color: Colors.grey),
+                        // ),
+                        icon: Icon(Icons.person_rounded),
+                        hintText: '아이디',
+                        border: OutlineInputBorder(),
+                    ),
                     validator: (value) =>
                     value!.isEmpty ? '아이디를 입력해주세요.' : null,
                     onSaved: (value) => _id = value!,
                   ),
+                  SizedBox(height: 5,),
                   TextFormField(
                     obscureText: true,
-                    decoration: InputDecoration(labelText: '비밀번호'),
+                    decoration: InputDecoration(
+                      icon: Icon(Icons.lock),
+                      hintText: '비밀번호',
+                      border: OutlineInputBorder(),
+                    ),
                     validator: (value) =>
                     value!.isEmpty ? '비밀번호를 입력해주세요.' : null,
                     onSaved: (value) => _password = value!,
                   ),
+                  SizedBox(height: 5,),
                   TextFormField(
-                    obscureText: true,
-                    decoration: InputDecoration(labelText: '이름'),
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                      icon: Icon(Icons.people),
+                      border: OutlineInputBorder(),
+                      hintText: '이름',
+                    ),
                     validator: (value) =>
                     value!.isEmpty ? '이름을 입력해주세요.' : null,
                     onSaved: (value) => _username = value!,
                   ),
+                  SizedBox(height: 5,),
                   TextFormField(
-                    obscureText: true,
-                    decoration: InputDecoration(labelText: '전화번호'),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly, //숫자만 가능
+                    ],
+                    keyboardType: TextInputType.number, //키보드는 숫자
+                    decoration: InputDecoration(
+                      icon: Icon(Icons.phone),
+                      border: OutlineInputBorder(),
+                      labelText: '전화번호',
+                    ),
                     validator: (value) =>
                     value!.isEmpty ? '전화번호를 입력해주세요.' : null,
                     onSaved: (value) => _tel = value!,
@@ -105,6 +132,7 @@ class _SignupPageState extends State<SignupPage> {
                         style: TextStyle(fontSize: 18.0),
                       ),
                       style: ElevatedButton.styleFrom(
+                        primary: themeColor.getColor(),
                         padding: EdgeInsets.all(10),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)

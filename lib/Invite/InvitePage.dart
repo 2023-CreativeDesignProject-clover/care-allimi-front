@@ -51,22 +51,6 @@ class _InvitePageState extends State<InvitePage> {
           child: Column(
             children: [
               Container(
-                padding: EdgeInsets.only(left: 13, top: 13, bottom: 10),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.room,
-                      color: Colors.black,
-                    ),
-                    Text(
-                      "구미요양원",
-                      style: TextStyle(fontSize: 12.0),
-                    )
-                  ],
-                ),
-              ),
-
-              Container(
                 //color: Colors.white,
                 child: ListTile(
                   contentPadding: const EdgeInsets.all(16.0),
