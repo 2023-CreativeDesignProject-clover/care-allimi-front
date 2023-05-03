@@ -37,7 +37,6 @@ class _MainFacilitySettingsPageState extends State<MainFacilitySettingsPage> {
               Divider(thickness: 0.5,),
               Test2(),
               Divider(thickness: 0.5,),
-              Test3()
             ],
           )
         ],
@@ -104,15 +103,6 @@ class _MainFacilitySettingsPageState extends State<MainFacilitySettingsPage> {
         trailing: Icon(Icons.arrow_forward_ios_sharp, color: Colors.grey),
         onTap: () {
           pageAnimation(context, InviteWaitPage());
-        });
-  }
-  Widget Test3() {
-    return ListTile(
-        visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-        title: Text('입소자정보입력 테스트'),
-        trailing: Icon(Icons.arrow_forward_ios_sharp, color: Colors.grey),
-        onTap: () {
-          pageAnimation(context, ResidentInfoInputPage());
         });
   }
 
