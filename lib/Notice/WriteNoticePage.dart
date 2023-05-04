@@ -104,7 +104,7 @@ class _WriteNoticePageState extends State<WriteNoticePage> {
           setState(() {});
 
           //TODO: 공지 작성 완료버튼 누르면 실행되어야 할 부분
-          },
+        },
         body: ListView(
           children: [
 

@@ -10,18 +10,19 @@ import 'MainPage.dart';
 import 'Setup/SetupPage.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
+
 ThemeColor themeColor = ThemeColor();
 
 void main() async {
   await initializeDateFormatting();
-    runApp(
+  runApp(
     //Provider 등록
       MultiProvider(providers: [
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => ResidentProvider()),
         ChangeNotifierProvider(create: (_) => AllimTempProvider())
       ],
-      child: const MyApp())
+          child: const MyApp())
   );
 }
 
@@ -51,7 +52,7 @@ class _MyAppState extends State<MyApp> {
           backgroundColor: Colors.white, //앱바 배경색
           elevation: 0,
           iconTheme: IconThemeData(
-            color: Colors.black
+              color: Colors.black
           ),
         ),
         textTheme: TextTheme(
@@ -59,14 +60,14 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      home: Consumer2<UserProvider, ResidentProvider>(
-        builder: (context, userProvider, residentProvider, child) {
-          if (userProvider.uid == 0) {
-            return LoginPage();
-          } else if (userProvider.urole == '') {
-            return InviteWaitPage();
-          } else {
-            debugPrint("@@@@@@@@@@" + userProvider.urole);
+      home: Consumer<UserProvider>(
+          builder: (context, userProvider, child) {
+            if (userProvider.uid == 0)          //userProvider의 uid값이 0이면 로그인이 되지 않은 상태 -> 로그인 페이지로 감
+              return LoginPage();
+            else if (userProvider.urole == '')  //userProvider의 user role 역할이 없으면 입소자 등록이 안된 상태 -> 초대화면으로 감
+              return InviteWaitPage();
+
+            //로그인도 되었고 입소자도 있을 때 화면
             return Scaffold(
               body: getPage(),
               bottomNavigationBar: Container(
@@ -90,8 +91,10 @@ class _MyAppState extends State<MyApp> {
                 ),
               ),
             );
+
+
+
           }
-        }
       ),
     );
   }

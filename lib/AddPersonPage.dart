@@ -27,13 +27,13 @@ class _AddPersonPageState extends State<AddPersonPage> {
             color: Colors.white,
             child: ListTile(
               leading: Icon(Icons.home_rounded, size: 50),
-                title: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(home[index]), //요양원
-                    Text(person[index]), //사람 이름
-                  ],
-                ),
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(home[index]), //요양원
+                  Text(person[index]), //사람 이름
+                ],
+              ),
               onTap: () {
                 Navigator.pop(context);
               },

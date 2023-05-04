@@ -133,11 +133,11 @@ class _ManagerNoticePageState extends State<ManagerNoticePage> {
   Widget getGreyTag() {
     return Container(
       padding: EdgeInsets.fromLTRB(7, 3, 7, 3),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(3),
-          color: Color(0xfff2f3f5),
-        ),
-        child: Text('공지사항', textScaleFactor: 0.85, style: TextStyle(color: Color(0xff6d767f))),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(3),
+        color: Color(0xfff2f3f5),
+      ),
+      child: Text('공지사항', textScaleFactor: 0.85, style: TextStyle(color: Color(0xff6d767f))),
     );
   }
 

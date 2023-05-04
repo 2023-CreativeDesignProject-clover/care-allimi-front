@@ -53,61 +53,61 @@ class UserAllimPageState extends State<UserAllimPage>{
           physics: NeverScrollableScrollPhysics(),
           itemBuilder: (context, index){
             return Container(
-                color: Colors.white,
-                child: ListTile(
-                  title: Column(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: Colors.white),
-                        width: double.infinity,
-                        height: 130,
-                        padding: EdgeInsets.only(top: 5,left: 1,right: 1),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
+              color: Colors.white,
+              child: ListTile(
+                title: Column(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: Colors.white),
+                      width: double.infinity,
+                      height: 130,
+                      padding: EdgeInsets.only(top: 5,left: 1,right: 1),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  child: Text(
+                                    noticeData[index].date,
+                                  ),
+                                ),
+                                Spacer(),
+                                Container(
+                                    padding: EdgeInsets.fromLTRB(0, 5, 15, 0),
                                     child: Text(
-                                      noticeData[index].date,
-                                    ),
-                                  ),
-                                  Spacer(),
-                                  Container(
-                                      padding: EdgeInsets.fromLTRB(0, 5, 15, 0),
-                                      child: Text(
-                                        noticeData[index].detail,
-                                        style: TextStyle(fontSize: 14),
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.left,
-                                      )
-                                  ),
-                                  Spacer(),
-                                ],
-                              ),
+                                      noticeData[index].detail,
+                                      style: TextStyle(fontSize: 14),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.left,
+                                    )
+                                ),
+                                Spacer(),
+                              ],
                             ),
-                            Container(
-                                width: 100,
-                                height: 100,
-                                child: Container(
-                                  child: Image.asset(noticeData[index].imgPath, fit: BoxFit.fill,),
-                                )
-                            ),
-                          ],
-                        ),
+                          ),
+                          Container(
+                              width: 100,
+                              height: 100,
+                              child: Container(
+                                child: Image.asset(noticeData[index].imgPath, fit: BoxFit.fill,),
+                              )
+                          ),
+                        ],
                       ),
-                      //Divider(thickness: 5),
-                    ],
-                  ),
-                  onTap: (){
-                    pageAnimation(context, UserSecondAllimPage());
-                    print(index);
-                  },
+                    ),
+                    //Divider(thickness: 5),
+                  ],
                 ),
+                onTap: (){
+                  pageAnimation(context, UserSecondAllimPage());
+                  print(index);
+                },
+              ),
             );
           }, separatorBuilder: (BuildContext context, int index) => const Divider(height: 9, color: Color(0xfff8f8f8),),
         ),

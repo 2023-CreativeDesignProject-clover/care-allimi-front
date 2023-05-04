@@ -26,67 +26,67 @@ class _AddFacilitiesState extends State<AddFacilities> {
   Widget addFacilities() {
     return Scaffold(
       body: SafeArea(
-        child: ListView(
-          children: [
-            Text('시설 정보를 입력해주세요.'),
+          child: ListView(
+            children: [
+              Text('시설 정보를 입력해주세요.'),
 
 
-            //TODO: 시설명, 주소, 전번, 이름
+              //TODO: 시설명, 주소, 전번, 이름
 
-            Form(
-              key: formKey,
-              child: Column(
-                children: [
-                  getTextFormField(
-                      textInputType: TextInputType.text,
-                      icon: Icons.home_rounded,
-                      hintText: '시설명',
-                      controller: facilityNameController,
-                      errormsg: '시설명을 입력하세요'),
+              Form(
+                  key: formKey,
+                  child: Column(
+                    children: [
+                      getTextFormField(
+                          textInputType: TextInputType.text,
+                          icon: Icons.home_rounded,
+                          hintText: '시설명',
+                          controller: facilityNameController,
+                          errormsg: '시설명을 입력하세요'),
 
-                  getTextFormField(
-                      textInputType: TextInputType.text,
-                      icon: Icons.place_rounded,
-                      hintText: '주소',
-                      controller: locationController,
-                      errormsg: '주소를 입력하세요'),
-
-
-                  getTextFormField(
-                      textInputType: TextInputType.number,
-                      inputFormatters: [
-                        MultiMaskedTextInputFormatter(masks: ['xxx-xxxx-xxxx', 'xxx-xxx-xxxx'], separator: '-')
-                      ],
-                      icon: Icons.call_rounded,
-                      hintText: '전화번호',
-                      controller: numberController,
-                      errormsg: '전화번호를 입력하세요'),
-
-                  getTextFormField(
-                      textInputType: TextInputType.text,
-                      icon: Icons.person_rounded,
-                      hintText: '시설장 이름',
-                      controller: personNameController,
-                      errormsg: '시설장 이름을 입력하세요'),
-                ],
-              )
-            ),
+                      getTextFormField(
+                          textInputType: TextInputType.text,
+                          icon: Icons.place_rounded,
+                          hintText: '주소',
+                          controller: locationController,
+                          errormsg: '주소를 입력하세요'),
 
 
-            OutlinedButton(
-              child: Text('확인'),
-              onPressed: (){
-                print('시설 추가 확인 Tap');
+                      getTextFormField(
+                          textInputType: TextInputType.number,
+                          inputFormatters: [
+                            MultiMaskedTextInputFormatter(masks: ['xxx-xxxx-xxxx', 'xxx-xxx-xxxx'], separator: '-')
+                          ],
+                          icon: Icons.call_rounded,
+                          hintText: '전화번호',
+                          controller: numberController,
+                          errormsg: '전화번호를 입력하세요'),
 
-                if(this.formKey.currentState!.validate()) {
-                  //TODO: 시설 추가 확인 버튼 누르면 실행되어야 할 부분
+                      getTextFormField(
+                          textInputType: TextInputType.text,
+                          icon: Icons.person_rounded,
+                          hintText: '시설장 이름',
+                          controller: personNameController,
+                          errormsg: '시설장 이름을 입력하세요'),
+                    ],
+                  )
+              ),
 
-                }
 
-              },
-            ),
-          ],
-        )
+              OutlinedButton(
+                child: Text('확인'),
+                onPressed: (){
+                  print('시설 추가 확인 Tap');
+
+                  if(this.formKey.currentState!.validate()) {
+                    //TODO: 시설 추가 확인 버튼 누르면 실행되어야 할 부분
+
+                  }
+
+                },
+              ),
+            ],
+          )
       ),
     );
   }

@@ -26,28 +26,28 @@ class _CommentPageState extends State<ManagerCommentPage> {
     return ListView(
       children: [
         ListView.separated(
-            itemCount: com.length,
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index){
-              return Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: Colors.white),
-                height: 130,
-                padding: EdgeInsets.all(10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(whosend[index], textScaleFactor: 1.0,),
-                    Text(date[index], textScaleFactor: 1.0,),
-                    SizedBox(height: 10,),
-                    Text(com[index], textScaleFactor: 1.1,),
-                  ],
-                ),
-              );
-            }, separatorBuilder: (BuildContext context, int index) => const Divider(height: 9, color: Color(0xfff8f8f8),),  //구분선(height로 상자 사이 간격을 조절)
-          ),
+          itemCount: com.length,
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          itemBuilder: (context, index){
+            return Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  color: Colors.white),
+              height: 130,
+              padding: EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(whosend[index], textScaleFactor: 1.0,),
+                  Text(date[index], textScaleFactor: 1.0,),
+                  SizedBox(height: 10,),
+                  Text(com[index], textScaleFactor: 1.1,),
+                ],
+              ),
+            );
+          }, separatorBuilder: (BuildContext context, int index) => const Divider(height: 9, color: Color(0xfff8f8f8),),  //구분선(height로 상자 사이 간격을 조절)
+        ),
       ],
     );
   }

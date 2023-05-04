@@ -75,7 +75,7 @@ class _InvitePageState extends State<InvitePage> {
                 ),
               ),
               Container(
-                  //color: Colors.white,
+                //color: Colors.white,
                   padding: EdgeInsets.only(left: 18,top: 12, right: 18),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,

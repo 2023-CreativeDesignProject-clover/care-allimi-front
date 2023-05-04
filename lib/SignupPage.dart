@@ -23,14 +23,14 @@ Future<String> signUpRequest(String id, String password, String name, String pho
   );
 
 
-    // 응답 코드가 200 OK가 아닐 경우 예외 처리
+  // 응답 코드가 200 OK가 아닐 경우 예외 처리
   if (response.statusCode == 500) {
     throw Exception('POST request failed');
   }
   else if (response.statusCode == 400) {
     throw FormatException();
   }
-  
+
   return response.body;
 }
 
@@ -74,13 +74,13 @@ class _SignupPageState extends State<SignupPage> {
                 children: <Widget>[
                   TextFormField(
                     decoration: InputDecoration(
-                        // prefixIcon: Padding(
-                        //   padding: EdgeInsets.only(top: 15),
-                        //   child: Icon(Icons.person_rounded, color: Colors.grey),
-                        // ),
-                        icon: Icon(Icons.person_rounded),
-                        hintText: '아이디',
-                        border: OutlineInputBorder(),
+                      // prefixIcon: Padding(
+                      //   padding: EdgeInsets.only(top: 15),
+                      //   child: Icon(Icons.person_rounded, color: Colors.grey),
+                      // ),
+                      icon: Icon(Icons.person_rounded),
+                      hintText: '아이디',
+                      border: OutlineInputBorder(),
                     ),
                     validator: (value) =>
                     value!.isEmpty ? '아이디를 입력해주세요.' : null,
@@ -149,10 +149,10 @@ class _SignupPageState extends State<SignupPage> {
 
                             if (e.runtimeType == FormatException)  //중복된 아이디
                               errorMessage = '중복된 아이디입니다';
-                            else 
+                            else
                               errorMessage = '회원가입에 실패하였습니다';
-                            
-                            
+
+
                             showDialog(
                                 context: context,
                                 barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
@@ -170,9 +170,9 @@ class _SignupPageState extends State<SignupPage> {
                                     ],
                                   );
                                 }
-                              );
+                            );
                           }
-                          
+
                           var json_data = json.decode(data);
 
                           if (json_data['user_id'] == null) {
@@ -181,14 +181,7 @@ class _SignupPageState extends State<SignupPage> {
 
                           Navigator.pop(context);
                         }
-
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) => LoginPage()),
-                      // );
-                      
-                      //pageAnimation(context, LoginPage());
-                    }
+                      }
                   ),
                 ],
               ),

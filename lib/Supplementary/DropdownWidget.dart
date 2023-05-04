@@ -42,13 +42,13 @@ class _AllimFirstDropdownState extends State<AllimFirstDropdown> {
           setState(() => selectedValue = value!);
           if (menu == '아침') {
             Provider.of<AllimTempProvider>(context, listen: false)
-              .setMorning(value);
+                .setMorning(value);
           }else if (menu == '점심') {
             Provider.of<AllimTempProvider>(context, listen: false)
-              .setLaunch(value);
+                .setLaunch(value);
           }else if (menu == '저녁') {
             Provider.of<AllimTempProvider>(context, listen: false)
-              .setDinner(value);
+                .setDinner(value);
           }
         },
       ),

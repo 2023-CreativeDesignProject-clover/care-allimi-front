@@ -20,13 +20,13 @@ class _PeopleManagementPageState extends State<PeopleManagementPage> with Ticker
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(title: Text('직원 관리')),
-      body: ListView(
-        children: [
-          approve()
-        ],
-      )
+        backgroundColor: Colors.white,
+        appBar: AppBar(title: Text('직원 관리')),
+        body: ListView(
+          children: [
+            approve()
+          ],
+        )
     );
   }
 

@@ -34,81 +34,81 @@ class _ManagerCalendarPageState extends State<ManagerCalendarPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('일정표')),
-      body: ListView(
-        children: [
-          TableCalendar(
-            locale: 'ko_KR', // 한국어
-            firstDay: DateTime(2023),
-            lastDay: DateTime(2100),
-            focusedDay: _focusedDay,
-            calendarFormat: _calendarFormat,
-            headerStyle: HeaderStyle(
-              titleCentered: true,
-              titleTextFormatter: (date, locale) => DateFormat.yMMMMd(locale).format(date),
-              formatButtonVisible: false,
-              titleTextStyle: const TextStyle(fontSize: 20, color: Colors.black),
-              headerPadding: const EdgeInsets.symmetric(vertical: 4),
-              leftChevronIcon: const Icon(Icons.arrow_left, size: 40),
-              rightChevronIcon: const Icon(Icons.arrow_right, size: 40),
-            ),
-            calendarStyle: CalendarStyle(
-              markerDecoration : const BoxDecoration(
-                color: Colors.red,
-                shape: BoxShape.circle,
+        appBar: AppBar(title: const Text('일정표')),
+        body: ListView(
+          children: [
+            TableCalendar(
+              locale: 'ko_KR', // 한국어
+              firstDay: DateTime(2023),
+              lastDay: DateTime(2100),
+              focusedDay: _focusedDay,
+              calendarFormat: _calendarFormat,
+              headerStyle: HeaderStyle(
+                titleCentered: true,
+                titleTextFormatter: (date, locale) => DateFormat.yMMMMd(locale).format(date),
+                formatButtonVisible: false,
+                titleTextStyle: const TextStyle(fontSize: 20, color: Colors.black),
+                headerPadding: const EdgeInsets.symmetric(vertical: 4),
+                leftChevronIcon: const Icon(Icons.arrow_left, size: 40),
+                rightChevronIcon: const Icon(Icons.arrow_right, size: 40),
               ),
+              calendarStyle: CalendarStyle(
+                markerDecoration : const BoxDecoration(
+                  color: Colors.red,
+                  shape: BoxShape.circle,
+                ),
+              ),
+              onDaySelected: (selectedDay, focusedDay) {
+                if (!isSameDay(_selectedDate, selectedDay)) {
+                  // Call `setState()` when updating the selected day
+                  setState(() {
+                    _selectedDate = selectedDay;
+                    _focusedDay = focusedDay;
+                  });
+                }
+              },
+              selectedDayPredicate: (day) {
+                return isSameDay(_selectedDate, day);
+              },
+              onFormatChanged: (format) {
+                if (_calendarFormat != format) {
+                  // Call `setState()` when updating calendar format
+                  setState(() {
+                    _calendarFormat = format;
+                  });
+                }
+              },
+              onPageChanged: (focusedDay) {
+                // No need to call `setState()` here
+                _focusedDay = focusedDay;
+              },
+              eventLoader: _listOfDayEvents,
             ),
-            onDaySelected: (selectedDay, focusedDay) {
-              if (!isSameDay(_selectedDate, selectedDay)) {
-                // Call `setState()` when updating the selected day
-                setState(() {
-                  _selectedDate = selectedDay;
-                  _focusedDay = focusedDay;
-                });
-              }
-            },
-            selectedDayPredicate: (day) {
-              return isSameDay(_selectedDate, day);
-            },
-            onFormatChanged: (format) {
-              if (_calendarFormat != format) {
-                // Call `setState()` when updating calendar format
-                setState(() {
-                  _calendarFormat = format;
-                });
-              }
-            },
-            onPageChanged: (focusedDay) {
-              // No need to call `setState()` here
-              _focusedDay = focusedDay;
-            },
-            eventLoader: _listOfDayEvents,
-          ),
-          ..._listOfDayEvents(_selectedDate!).map((myEvents) =>
-              ListTile(
+            ..._listOfDayEvents(_selectedDate!).map((myEvents) =>
+                ListTile(
                   leading: const Icon(Icons.done_rounded, color: Colors.teal),
                   title: Text('${myEvents['eventTitle']}'),
-                trailing: OutlinedButton(
-                  child: Text('삭제'),
-                  onPressed: (){
-                    //TODO: 삭제 이벤트
-                  },
+                  trailing: OutlinedButton(
+                    child: Text('삭제'),
+                    onPressed: (){
+                      //TODO: 삭제 이벤트
+                    },
+                  ),
+                  //subtitle: Text('Description:   ${myEvents['eventDescp']}'),
                 ),
-                //subtitle: Text('Description:   ${myEvents['eventDescp']}'),
-              ),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        focusColor: Colors.white54,
-        backgroundColor: themeColor.getColor(),
-        elevation: 0,
-        focusElevation: 0,
-        highlightElevation: 0,
-        hoverElevation: 0,
-        onPressed: () { _showAddEventDialog(); },
-        child: Icon(Icons.create_rounded, color: Colors.white),
-      )
+            ),
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          focusColor: Colors.white54,
+          backgroundColor: themeColor.getColor(),
+          elevation: 0,
+          focusElevation: 0,
+          highlightElevation: 0,
+          hoverElevation: 0,
+          onPressed: () { _showAddEventDialog(); },
+          child: Icon(Icons.create_rounded, color: Colors.white),
+        )
     );
   }
 

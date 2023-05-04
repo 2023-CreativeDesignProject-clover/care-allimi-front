@@ -26,38 +26,38 @@ class _FacilityBasicInfoPageState extends State<FacilityBasicInfoPage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
-              padding: EdgeInsets.all(18),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Container(
-                    child: Text('시설 정보'),
-                    padding: EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                      color: Color(0xfff2f3f6),
-                      border: Border.all(color: Color(0xfff2f3f6),width: 3)
+                padding: EdgeInsets.all(18),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Container(
+                      child: Text('시설 정보'),
+                      padding: EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                          color: Color(0xfff2f3f6),
+                          border: Border.all(color: Color(0xfff2f3f6),width: 3)
+                      ),
                     ),
-                  ),
-                  Container(  //시설 이름
-                    child: Text('삼족오 요양원', textScaleFactor: 1.2,),
+                    Container(  //시설 이름
+                      child: Text('삼족오 요양원', textScaleFactor: 1.2,),
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
                           color: Colors.white,
                           border: Border.all(color: Color(0xfff2f3f6),width: 2)
                       ),
-                  ),
-                  Container(  //전화번호
-                    child: Text('010-1234-5678', textScaleFactor: 1.2,),
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(color: Color(0xfff2f3f6),width: 2)
                     ),
-                  ),
+                    Container(  //전화번호
+                      child: Text('010-1234-5678', textScaleFactor: 1.2,),
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: Color(0xfff2f3f6),width: 2)
+                      ),
+                    ),
 
-                ],
-              )
+                  ],
+                )
             ),
             Container(
                 padding: EdgeInsets.all(18),

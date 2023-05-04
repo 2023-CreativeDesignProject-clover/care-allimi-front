@@ -15,19 +15,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http; //http 사용
 
-
 String backendUrl = "http://13.125.155.244:8080/v2/";
 
-ThemeColor themeColor = ThemeColor();
 
-List<String> textPerson = ['구현진', '권태연', '정혜지', '주효림'];
-List<String> imgList = [
-  'assets/images/tree.jpg',
-  'assets/images/tree.jpg',
-  'assets/images/cake.jpg',
-  'assets/images/cake.jpg',
-  'assets/images/tree.jpg'
-];
+ThemeColor themeColor = ThemeColor();
 
 class WriteAllimPage extends StatefulWidget {
   const WriteAllimPage({Key? key}) : super(key: key);
@@ -41,20 +32,20 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
   final formKey = GlobalKey<FormState>();
   String selectedPerson = "수급자 선택";
   int selectedPersonId = 0;
-  final ImagePicker _picker = ImagePicker();
   String _contents = '';
   String _subContents = '';
 
+  final ImagePicker _picker = ImagePicker();
   List<XFile> _pickedImgs = [];
   List<Map<String, dynamic>> _residents = []; // 수정된 부분
 
   Future<void> getFacilityResident(int facilityId) async {
     http.Response response = await http.get(
-      Uri.parse(backendUrl + "nhResidents/protectors/" + facilityId.toString()),
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-        'Accept-Charset': 'utf-8'
-      }
+        Uri.parse(backendUrl + "nhResidents/protectors/" + facilityId.toString()),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Accept-Charset': 'utf-8'
+        }
     );
 
     var data =  utf8.decode(response.bodyBytes);
@@ -66,7 +57,8 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
     });
   }
 
-  Future<void> _pickImg() async { // 앨범
+  // 앨범
+  Future<void> _pickImg() async {
     final List<XFile>? images = await _picker.pickMultiImage();
     if (images != null) {
       setState(() {
@@ -75,7 +67,8 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
     }
   }
 
-  Future<void> _takeImg() async { // 카메라
+  // 카메라
+  Future<void> _takeImg() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.camera);
     if (image != null) {
       setState(() {
@@ -84,14 +77,14 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
     }
   }
 
-  // 서버에 이미지 업로드
-  Future<void> imageUpload(userId, facilityId) async {
+  // 서버에 알림장 업로드 + 사진 업로드
+  Future<void> addAllim(userId, facilityId) async {
     final List<MultipartFile> _files = _pickedImgs.map((img) => MultipartFile.fromFileSync(img.path, contentType: MediaType("image", "jpg"))).toList();
     var formData = FormData.fromMap({
       "notice": MultipartFile.fromString(
         jsonEncode(
-          {"user_id": userId, "nhresident_id": selectedPersonId, "facility_id": facilityId, 
-           "contents": _contents, "sub_contents": _subContents}),
+            {"user_id": userId, "nhresident_id": selectedPersonId, "facility_id": facilityId,
+              "contents": _contents, "sub_contents": _subContents}),
         contentType: MediaType.parse('application/json'),
       ),
       "file": _files
@@ -108,83 +101,78 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Consumer3<UserProvider, ResidentProvider,AllimTempProvider> (
-      builder: (context, userProvider, residentProvider,allimTempProvider, child) {
-        return customPage(
-          title: '알림장 작성',
-          onPressed: () async {
-            print('알림장 작성 완료버튼 누름');
-
-            if (selectedPersonId == 0) {
-              showDialog(
-                context: context,
-                barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    content: Text("수급자를 선택해주세요!"),
-                    insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                    actions: [
-                      TextButton(
-                        child: const Text('확인'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                  );
-                }
-              );
-              return;
-            }
-
-            if(this.formKey.currentState!.validate()) {
-              this.formKey.currentState!.save();
-
+        builder: (context, userProvider, residentProvider,allimTempProvider, child) {
+          return customPage(
+            title: '알림장 작성',
+            onPressed: () async {
+              print('알림장 작성 완료버튼 누름');
+              //수급자 선택 안하면 다이얼로그 띄우기
               if (selectedPersonId == 0) {
-                //에러처리
-                
+                showDialog(
+                    context: context,
+                    barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        content: Text("수급자를 선택해주세요!"),
+                        insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                        actions: [
+                          TextButton(
+                            child: const Text('확인'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    }
+                );
+                return;
               }
 
-              _subContents = '';
-              _subContents += allimTempProvider.morning + '\n';
-              _subContents += allimTempProvider.launch + '\n';
-              _subContents += allimTempProvider.dinner + '\n';
-              _subContents += allimTempProvider.medication;
-              
-              try {
-                await imageUpload(userProvider.uid, residentProvider.facility_id);
-                _pickedImgs = [];
-                setState(() {});
-                Navigator.pop(context);
-              } catch(e) {
-                showDialog(
-                context: context,
-                barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    content: Text("알림장 업로드 실패! 다시 시도해주세요"),
-                    insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
-                    actions: [
-                      TextButton(
-                        child: const Text('확인'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
+              if(this.formKey.currentState!.validate()) {
+                this.formKey.currentState!.save();
+
+                _subContents = '';
+                _subContents += allimTempProvider.morning + '\n';
+                _subContents += allimTempProvider.launch + '\n';
+                _subContents += allimTempProvider.dinner + '\n';
+                _subContents += allimTempProvider.medication;
+
+                try {
+                  await addAllim(userProvider.uid, residentProvider.facility_id);
+                  _pickedImgs = [];
+                  setState(() {});
+                  Navigator.pop(context);
+                } catch(e) {
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false, // 바깥 영역 터치시 닫을지 여부
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          content: Text("알림장 업로드 실패! 다시 시도해주세요"),
+                          insetPadding: const  EdgeInsets.fromLTRB(0,80,0, 80),
+                          actions: [
+                            TextButton(
+                              child: const Text('확인'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      }
                   );
                 }
-              );
               }
-              
-            }},
-          body: writePost(),
-          buttonName: '완료',
-        );
-      }
-
+            },
+            body: writePost(),
+            buttonName: '완료',
+          );
+        }
     );
 
   }
@@ -193,7 +181,6 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
     return ListView(
       children: [
         //수급자 선택
-        //createPersonCard(),
         getPersonCard(),
         SizedBox(height: 8),
         //텍스트필드
@@ -235,6 +222,7 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
         ),
       ),
       onTap: () {
+
         print('수급자 선택하기 Tap');
 
         //TODO: 수급자 선택 화면
@@ -262,41 +250,42 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
           Container(
             color: Colors.white,
             child: Consumer<ResidentProvider>(
-              builder: (context, residentProvider, child) {
-                return FutureBuilder(
-                  future: getFacilityResident(residentProvider.facility_id),
-                  builder: (context, snapshot) {
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: _residents.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return ListTile(
-                          leading: Icon(Icons.person_rounded, color: Colors.grey),
-                          title: Row(
-                            children: [
-                              Text('${_residents[index]['name']} 님'), //TODO: 수급자 이름 리스트
-                              // Text('${textPerson[index]} 님'), //TODO: 수급자 이름 리스트
-                            ],
-                          ),
-                          onTap: () {
-                            // print('수급자 이름 ${_residents[index]['name']} Tap');
-                            
-                            // TODO: 수급자 선택 시 처리할 이벤트
-                            setState(() {
-                              selectedPerson = '${_residents[index]['name']} 님'; 
-                              selectedPersonId = _residents[index]['id'];
-                            });
+                builder: (context, residentProvider, child) {
+                  return Consumer<ResidentProvider>(
+                      builder: (context, residentProvider, child) {
+                        return FutureBuilder(
+                            future: getFacilityResident(residentProvider.facility_id),
+                            builder: (context, snapshot) {
+                              return ListView.builder(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: _residents.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return ListTile(
+                                    leading: Icon(Icons.person_rounded, color: Colors.grey),
+                                    title: Row(
+                                      children: [
+                                        Text('${_residents[index]['name']} 님'), //TODO: 수급자 이름 리스트
+                                      ],
+                                    ),
+                                    onTap: () {
+                                      // TODO: 수급자 선택 시 처리할 이벤트
+                                      setState(() {
+                                        selectedPerson = '${_residents[index]['name']} 님';
+                                        selectedPersonId = _residents[index]['id'];
+                                      });
 
-                            Navigator.pop(context);
+                                      Navigator.pop(context);
 
-                          },
+                                    },
+                                  );
+                                },
+                              );
+                            }
                         );
-                      },
-                    );
-                  }
-                );
-              }
+                      }
+                  );
+                }
             ),
           ),
         ],
@@ -312,23 +301,23 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
         width: double.infinity,
         height: 350,
         child: TextFormField(
-          validator: (value) {
-            if(value!.isEmpty) { return '내용을 입력하세요'; }
-            else { return null; }
-          },
-          maxLines: 1000,
-          decoration: const InputDecoration(
-            hintText: '내용을 입력하세요',
-            filled: true,
-            fillColor: Colors.white,
-            border: InputBorder.none,
-            focusedBorder: InputBorder.none,
-          ),
-          onSaved: (value) {
-            _contents = value!;
-          } ,
+            validator: (value) {
+              if(value!.isEmpty) { return '내용을 입력하세요'; }
+              else { return null; }
+            },
+            maxLines: 1000,
+            decoration: const InputDecoration(
+              hintText: '내용을 입력하세요',
+              filled: true,
+              fillColor: Colors.white,
+              border: InputBorder.none,
+              focusedBorder: InputBorder.none,
+            ),
+            onSaved: (value) {
+              _contents = value!;
+            }
         ),
-      )
+      ),
     );
   }
 
@@ -378,7 +367,6 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           //사진 추가하는 버튼
           GestureDetector(
             child: Padding(
@@ -401,14 +389,12 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
                       children: [
                         ListTile(leading: Icon(Icons.camera_alt, color: Colors.grey), title: Text('카메라'),
                           onTap: () {
-                            Navigator.pop(context);
-                            _takeImg();
+                            //TODO: 카메라 누르면 실행되어야 할 부분
                           },
                         ),
                         ListTile(leading: Icon(Icons.photo_library, color: Colors.grey), title: Text('갤러리'),
                           onTap: () {
-                            Navigator.pop(context);
-                            _pickImg();
+                            //TODO: 갤러리 누르면 실행되어야 할 부분
                           },
                         ),
                       ],
@@ -421,44 +407,44 @@ class _WriteAllimPageState extends State<WriteAllimPage> {
 
 
           //사진 리스트 출력
-          Container(
-            height: 96,
-            color: Colors.white,
-            child: ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                itemCount: imgList.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                      margin: EdgeInsets.fromLTRB(3,8,3,8),
-                      child: Stack(
-                        children: [
-                          ClipRRect(
-                            child: Image.asset(
-                              width: 80,
-                              height: 80,
-                              imgList[index], //TODO: 사진 리스트
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          Positioned(
-                            top: 3,
-                            right: 3,
-                            child: GestureDetector(
-                              child: Container(
-                                child: Icon(Icons.cancel_rounded, color: Colors.black54),
-                              ),
-                              onTap: () {
-                                print('사진 삭제 Tap'); //TODO: 사진 삭제 기능
-                              },
-                            ),
-                          ),
-                        ],
-                      )
-                  );
-                }
-            ),
-          ),
+          // Container(
+          //   height: 96,
+          //   color: Colors.white,
+          //   child: ListView.builder(
+          //       shrinkWrap: true,
+          //       scrollDirection: Axis.horizontal,
+          //       itemCount: imgList.length,
+          //       itemBuilder: (BuildContext context, int index) {
+          //         return Container(
+          //             margin: EdgeInsets.fromLTRB(3,8,3,8),
+          //             child: Stack(
+          //               children: [
+          //                 ClipRRect(
+          //                   child: Image.asset(
+          //                     width: 80,
+          //                     height: 80,
+          //                     imgList[index], //TODO: 사진 리스트
+          //                     fit: BoxFit.cover,
+          //                   ),
+          //                 ),
+          //                 Positioned(
+          //                   top: 3,
+          //                   right: 3,
+          //                   child: GestureDetector(
+          //                     child: Container(
+          //                       child: Icon(Icons.cancel_rounded, color: Colors.black54),
+          //                     ),
+          //                     onTap: () {
+          //                       print('사진 삭제 Tap'); //TODO: 사진 삭제 기능
+          //                     },
+          //                   ),
+          //                 ),
+          //               ],
+          //             )
+          //         );
+          //       }
+          //   ),
+          // ),
         ],
       ),
     );

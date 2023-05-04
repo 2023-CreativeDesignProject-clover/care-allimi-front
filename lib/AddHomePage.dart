@@ -68,83 +68,83 @@ class _AddHomePageState extends State<AddHomePage> {
           children: [
             Container(
               width: double.infinity,
-                margin: EdgeInsets.all(15),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                        child: OutlinedButton(
-                          onPressed: (){
-                            _showDialog(context);
-                          },
-                          style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.white)),
-                          child: Container(
-                            margin: EdgeInsets.fromLTRB(0, 10, 0, 10),  //버튼 테두리와 텍스트 사이에 공백
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,  //텍스트와 아이콘 배치
-                              children: [
-                                Text(
-                                  // '시/도 선택',
-                                  text1,
-                                  textScaleFactor: 1.1,
-                                  style: TextStyle(color:Colors.black, ),
-                                ),
-                                Icon(Icons.keyboard_arrow_down_sharp, size: 18,color: Colors.black,)
-                              ],
+              margin: EdgeInsets.all(15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: (){
+                        _showDialog(context);
+                      },
+                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.white)),
+                      child: Container(
+                        margin: EdgeInsets.fromLTRB(0, 10, 0, 10),  //버튼 테두리와 텍스트 사이에 공백
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,  //텍스트와 아이콘 배치
+                          children: [
+                            Text(
+                              // '시/도 선택',
+                              text1,
+                              textScaleFactor: 1.1,
+                              style: TextStyle(color:Colors.black, ),
                             ),
-                          ),
-
+                            Icon(Icons.keyboard_arrow_down_sharp, size: 18,color: Colors.black,)
+                          ],
                         ),
+                      ),
+
                     ),
-                    Expanded(
-                        child: OutlinedButton(
-                          onPressed: (){
-                            if(check==0){
-                              showDialog(
-                                  context: context,
-                                  barrierDismissible: false,
-                                  builder: (BuildContext ctx){
-                                    return AlertDialog(
-                                      content: Text('시/도를 먼저 선택해주세요!'),
-                                      actions: [
-                                        Center(
-                                          child: TextButton(
-                                              child: Text("확인"),
-                                              onPressed: (){
-                                                Navigator.of(context).pop();
-                                              }
-                                          ),
-                                        )
-                                      ],
-                                    );
-                                  }
-                              );
-                            }
-                            else{
-                              _showDialog2(context);
-                            }
-                          },
-                          style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.white)),
-                          child: Container(
-                            margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  // '지역 선택',
-                                  text2,
-                                  textScaleFactor: 1.1,
-                                  style: TextStyle(color:Colors.black),
-                                ),
-                                Icon(Icons.keyboard_arrow_down_sharp, size: 18,color: Colors.black,)
-                              ],
+                  ),
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: (){
+                        if(check==0){
+                          showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (BuildContext ctx){
+                                return AlertDialog(
+                                  content: Text('시/도를 먼저 선택해주세요!'),
+                                  actions: [
+                                    Center(
+                                      child: TextButton(
+                                          child: Text("확인"),
+                                          onPressed: (){
+                                            Navigator.of(context).pop();
+                                          }
+                                      ),
+                                    )
+                                  ],
+                                );
+                              }
+                          );
+                        }
+                        else{
+                          _showDialog2(context);
+                        }
+                      },
+                      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.white)),
+                      child: Container(
+                        margin: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              // '지역 선택',
+                              text2,
+                              textScaleFactor: 1.1,
+                              style: TextStyle(color:Colors.black),
                             ),
-                          ),
-
+                            Icon(Icons.keyboard_arrow_down_sharp, size: 18,color: Colors.black,)
+                          ],
                         ),
+                      ),
+
                     ),
-                  ],
-                ),
+                  ),
+                ],
+              ),
             ),
 
             Container(
@@ -167,7 +167,7 @@ class _AddHomePageState extends State<AddHomePage> {
       ],
     );
   }
-  
+
   //시/도 선택에 관한 함수
   Widget setupAlertDiaload() {
     return Container(
@@ -281,9 +281,9 @@ class _AddHomePageState extends State<AddHomePage> {
         itemCount: result.length,
         itemBuilder: (BuildContext context, int index2) {
           return Column(
-            children: [
-              place2(index2),
-            ]
+              children: [
+                place2(index2),
+              ]
           );
         },
       ),
@@ -322,52 +322,52 @@ class _AddHomePageState extends State<AddHomePage> {
       color: Colors.green,
     );
   }
-  
+
   //리스트
   Widget list() {
     return ListView.builder(
-          physics: const NeverScrollableScrollPhysics(),  //스크롤바 없애기
-          itemCount: nursingHomeDistanceresult.length,
-          shrinkWrap: true,
-          itemBuilder: (context, index3){
-            return InkWell(
-              onTap: (){
-                print(index3);
-              },
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  //Divider(),
-                  Row(
-                    children: [
-                      Icon(Icons.location_pin, size: 20,),
-                      Text(
-                        nursingHomeDistanceresult[index3],
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 18,
-                        ),
+        physics: const NeverScrollableScrollPhysics(),  //스크롤바 없애기
+        itemCount: nursingHomeDistanceresult.length,
+        shrinkWrap: true,
+        itemBuilder: (context, index3){
+          return InkWell(
+            onTap: (){
+              print(index3);
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                //Divider(),
+                Row(
+                  children: [
+                    Icon(Icons.location_pin, size: 20,),
+                    Text(
+                      nursingHomeDistanceresult[index3],
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
                       ),
-                    ],
-                  ),
-                  Text(
-                    nursingHomeNameresult[index3],
-                    style: TextStyle(
-                        fontSize: 23
                     ),
+                  ],
+                ),
+                Text(
+                  nursingHomeNameresult[index3],
+                  style: TextStyle(
+                      fontSize: 23
                   ),
-                  Text(
-                    nursingHomeAddressresult[index3],
-                    style: TextStyle(
-                        fontSize: 15
-                    ),
+                ),
+                Text(
+                  nursingHomeAddressresult[index3],
+                  style: TextStyle(
+                      fontSize: 15
                   ),
-                  Divider(thickness: 0.5,),
-                ],
-              ),
-            );
-          }
-        );
+                ),
+                Divider(thickness: 0.5,),
+              ],
+            ),
+          );
+        }
+    );
   }
 
 //지역들 누르면 그 지역에 해당되는 요양원들 넣기

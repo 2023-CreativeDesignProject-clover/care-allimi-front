@@ -25,7 +25,6 @@ class ResidentProvider  with ChangeNotifier {
 
   void setInviteId(int inviteId) {
     this.inviteId = inviteId;
-    notifyListeners();
   }
 
 

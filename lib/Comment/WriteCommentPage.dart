@@ -27,7 +27,7 @@ class _WriteCommentPageState extends State<WriteCommentPage> {
       buttonName: '완료',
     );
   }
-  
+
   Widget commentWrite(){
     return ListView(
       children: [
@@ -49,14 +49,14 @@ class _WriteCommentPageState extends State<WriteCommentPage> {
               // ),
               SizedBox(height: 5,),
               Container(
-                  padding: EdgeInsets.all(15),
-                  width: double.infinity,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    color: Color(0xfff2f3f6),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text('2023.12.25', textScaleFactor: 1.3),
+                padding: EdgeInsets.all(15),
+                width: double.infinity,
+                height: 60,
+                decoration: BoxDecoration(
+                  color: Color(0xfff2f3f6),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text('2023.12.25', textScaleFactor: 1.3),
               ),
               SizedBox(height: 15,),
               Text('한마디 작성'),
