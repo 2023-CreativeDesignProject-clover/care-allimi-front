@@ -17,6 +17,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http; //http 사용
 
+
 String backendUrl = "http://52.78.62.115:8080/v2/";
 
 
