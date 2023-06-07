@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:test_data/Invite/InviteWaitPage.dart';
-import '/BeforeMain/LoginPage.dart';
+import 'package:test_data/UI/BeforeMain/InviteWaitPage.dart';
+import '/UI/BeforeMain/LoginPage.dart';
 import 'package:test_data/provider/AllimTempProvider.dart';
 import 'package:test_data/provider/NoticeTempProvider.dart';
 import 'package:test_data/provider/ResidentProvider.dart';
 import 'package:test_data/provider/UserProvider.dart';
 import 'package:test_data/provider/VisitTempProvider.dart';
-import 'Supplementary/CustomWidget.dart';
-import 'Supplementary/ThemeColor.dart';
-import 'MainPage.dart';
-import 'Setup/SetupPage.dart';
+import 'UI/Supplementary/CustomWidget.dart';
+import 'UI/Supplementary/ThemeColor.dart';
+import 'UI/Main/MainPage.dart';
+import 'UI/Setup/SetupPage.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
