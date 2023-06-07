@@ -65,12 +65,12 @@ flutter:
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/app_icon.png"
+  image_path: "assets/images/app_icon.png"
   remove_alpha_ios: true
 
 flutter_native_splash:
   color: "#5BB193"
-  image: assets/splash_screen.png
+  image: assets/images/splash_screen.png
   android_12:
     color: "#5BB193"
-    image: assets/splash_screen.png
+    image: assets/images/splash_screen.png
